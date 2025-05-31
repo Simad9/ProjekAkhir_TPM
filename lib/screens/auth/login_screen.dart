@@ -19,9 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   Future<void> _login() async {
-    print('Username: ${usernameController.text}');
-    print('Password: ${passwordController.text}');
-
     if (usernameController.text.isNotEmpty ||
         passwordController.text.isNotEmpty) {
       String session = usernameController.text + passwordController.text;

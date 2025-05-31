@@ -7,17 +7,18 @@ environment:
   sdk: ^3.7.2
 
 dependencies:
+  cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  shared_preferences: ^2.0.15 # pastikan versinya terbaru
-  shared_preferences_web: ^2.0.0 # Tambahkan paket ini untuk web
-  intl: ^0.18.0
-  url_launcher: ^6.3.1
-  google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
+  google_maps_flutter: ^2.5.0
+  http: ^1.4.0
+  intl: ^0.18.0
   permission_handler: ^11.0.0
-  flutter_dotenv: ^5.0.2
+  sensors_plus: ^6.1.1
+  shared_preferences: ^2.0.15
+  shared_preferences_web: ^2.0.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0

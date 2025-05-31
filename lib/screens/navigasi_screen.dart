@@ -46,8 +46,8 @@ class _NavigasiScreenState extends State<NavigasiScreen> {
 
   final List<Widget> _pages = <Widget>[
     ListScreen(),
-    ProfileScreen(),
     HomeScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

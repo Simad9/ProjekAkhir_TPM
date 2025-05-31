@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/auth/login_screen.dart';
+import 'package:projek_akhir_mobile/screens/navigasi_screen.dart';
+// import 'screens/auth/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF4CA2FF)),
       ),
-      home: const LoginScreen(),
+      home: const NavigasiScreen(),
     );
   }
 }
