@@ -20,7 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
     _fetchSuratList();
+  }
+
+  Future<bool> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    return sessionToken != null;
   }
 
   Future<void> _fetchSuratList() async {
@@ -41,14 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('session_token'); // Hapus session token
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ), // Arahkan ke halaman login
-      );
-    }
+    await prefs.remove('username');
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   @override
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('No movies found.'));
+                        return Center(child: Text('Tidak Ada Data'));
                       }
 
                       final suratList = snapshot.data!;

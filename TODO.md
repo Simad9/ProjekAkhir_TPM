@@ -23,9 +23,9 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 
 ### Tujuan Halaman
 
-- [x] Login = Berhasil masuk
-- [ ] Register
-- [x] Home
+- [x] Login (session ada)
+- [x] Register
+- [x] Home 
 - [x] List Surat
 - [ ] List Doa
 - [x] Tambah Hafalan

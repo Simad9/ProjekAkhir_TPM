@@ -1,4 +1,5 @@
 // Services
+import 'package:projek_akhir_mobile/services/user_save.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -23,30 +24,33 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordController.text.isNotEmpty) {
       String session = usernameController.text + passwordController.text;
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('session_token', session);
+      final success = await UserSave().login(
+        usernameController.text,
+        passwordController.text,
+      );
 
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => NavigasiScreen()),
+      if (success) {
+        // Masukin Session
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('session_token', session);
+        await prefs.setString('username', usernameController.text);
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        await showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text('Login Gagal'),
+                content: Text('Username atau Password salah'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
         );
       }
-    } else {
-      await showDialog(
-        context: context,
-        builder:
-            (context) => AlertDialog(
-              title: Text('Login Gagal'),
-              content: Text('Username atau Password tidak boleh kosong'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-      );
     }
   }
 
