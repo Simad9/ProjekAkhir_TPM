@@ -23,7 +23,6 @@ class _NavigasiScreenState extends State<NavigasiScreen> {
   void initState() {
     super.initState();
     checkSession();
-    debugPrint('Session Token: $sessionToken');
   }
 
   Future<void> checkSession() async {

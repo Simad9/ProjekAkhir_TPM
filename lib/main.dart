@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
 import 'package:projek_akhir_mobile/screens/navigasi_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/detail_hafalan_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/tambah_screen.dart';
 // import 'screens/auth/login_screen.dart';
 
 void main() {
@@ -17,7 +20,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF4CA2FF)),
       ),
-      home: const NavigasiScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => NavigasiScreen(),
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => NavigasiScreen(),
+        '/tambah': (context) => TambahScreen(),
+        '/detail': (context) => DetailHafalanScreen(),
+      },
     );
   }
 }

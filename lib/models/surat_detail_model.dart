@@ -26,32 +26,43 @@ class SuratDetail {
   });
 
   factory SuratDetail.fromJson(Map<String, dynamic> json) => SuratDetail(
-        nomor: json['nomor'],
-        nama: json['nama'],
-        namaLatin: json['namaLatin'],
-        jumlahAyat: json['jumlahAyat'],
-        tempatTurun: json['tempatTurun'],
-        arti: json['arti'],
-        deskripsi: json['deskripsi'],
-        audioFull: Map<String, String>.from(json['audioFull']),
-        ayat: List<Ayat>.from(json['ayat'].map((x) => Ayat.fromJson(x))),
-        suratSelanjutnya: SuratSingkat.fromJson(json['suratSelanjutnya']),
-        suratSebelumnya: SuratSingkat.fromJson(json['suratSebelumnya']),
-      );
+    nomor: json['nomor'],
+    nama: json['nama'],
+    namaLatin: json['nama_latin'],
+    jumlahAyat: json['jumlah_ayat'],
+    tempatTurun: json['tempat_turun'],
+    arti: json['arti'],
+    deskripsi: json['deskripsi'],
+    audioFull: Map<String, String>.from(
+      json['audio'] ?? {},
+    ), // perhatikan 'audio' bukan 'audioFull'
+    ayat:
+        (json['ayat'] as List<dynamic>)
+            .map((x) => Ayat.fromJson(x as Map<String, dynamic>))
+            .toList(),
+    suratSelanjutnya:
+        json['surat_selanjutnya'] != null && json['surat_selanjutnya'] != false
+            ? SuratSingkat.fromJson(json['surat_selanjutnya'])
+            : SuratSingkat(nomor: 0, nama: '', namaLatin: '', jumlahAyat: 0),
+    suratSebelumnya:
+        json['surat_sebelumnya'] != null && json['surat_sebelumnya'] != false
+            ? SuratSingkat.fromJson(json['surat_sebelumnya'])
+            : SuratSingkat(nomor: 0, nama: '', namaLatin: '', jumlahAyat: 0),
+  );
 
   Map<String, dynamic> toJson() => {
-        'nomor': nomor,
-        'nama': nama,
-        'namaLatin': namaLatin,
-        'jumlahAyat': jumlahAyat,
-        'tempatTurun': tempatTurun,
-        'arti': arti,
-        'deskripsi': deskripsi,
-        'audioFull': audioFull,
-        'ayat': ayat.map((x) => x.toJson()).toList(),
-        'suratSelanjutnya': suratSelanjutnya.toJson(),
-        'suratSebelumnya': suratSebelumnya.toJson(),
-      };
+    'nomor': nomor,
+    'nama': nama,
+    'namaLatin': namaLatin,
+    'jumlahAyat': jumlahAyat,
+    'tempatTurun': tempatTurun,
+    'arti': arti,
+    'deskripsi': deskripsi,
+    'audioFull': audioFull,
+    'ayat': ayat.map((x) => x.toJson()).toList(),
+    'suratSelanjutnya': suratSelanjutnya.toJson(),
+    'suratSebelumnya': suratSebelumnya.toJson(),
+  };
 }
 
 class Ayat {
@@ -70,20 +81,21 @@ class Ayat {
   });
 
   factory Ayat.fromJson(Map<String, dynamic> json) => Ayat(
-        nomorAyat: json['nomorAyat'],
-        teksArab: json['teksArab'],
-        teksLatin: json['teksLatin'],
-        teksIndonesia: json['teksIndonesia'],
-        audio: Map<String, String>.from(json['audio']),
-      );
+      nomorAyat: json['nomor'],
+      teksArab: json['ar'],
+      teksLatin: json['tr'],
+      teksIndonesia: json['idn'],
+      audio: {}, // karena tidak ada di JSON ini, kosongkan saja
+    );
+
 
   Map<String, dynamic> toJson() => {
-        'nomorAyat': nomorAyat,
-        'teksArab': teksArab,
-        'teksLatin': teksLatin,
-        'teksIndonesia': teksIndonesia,
-        'audio': audio,
-      };
+    'nomorAyat': nomorAyat,
+    'teksArab': teksArab,
+    'teksLatin': teksLatin,
+    'teksIndonesia': teksIndonesia,
+    'audio': audio,
+  };
 }
 
 class SuratSingkat {
@@ -99,17 +111,18 @@ class SuratSingkat {
     required this.jumlahAyat,
   });
 
-  factory SuratSingkat.fromJson(Map<String, dynamic> json) => SuratSingkat(
-        nomor: json['nomor'],
-        nama: json['nama'],
-        namaLatin: json['namaLatin'],
-        jumlahAyat: json['jumlahAyat'],
-      );
+ factory SuratSingkat.fromJson(Map<String, dynamic> json) => SuratSingkat(
+      nomor: json['nomor'],
+      nama: json['nama'],
+      namaLatin: json['nama_latin'],
+      jumlahAyat: json['jumlah_ayat'],
+    );
+
 
   Map<String, dynamic> toJson() => {
-        'nomor': nomor,
-        'nama': nama,
-        'namaLatin': namaLatin,
-        'jumlahAyat': jumlahAyat,
-      };
+    'nomor': nomor,
+    'nama': nama,
+    'namaLatin': namaLatin,
+    'jumlahAyat': jumlahAyat,
+  };
 }

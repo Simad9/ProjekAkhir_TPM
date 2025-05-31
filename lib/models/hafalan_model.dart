@@ -1,28 +1,28 @@
-class HafalanModel {
-  final int id;
+class Hafalan {
   final int nomorSurat;
+  final String namaSurat;
   final String tanggalMulai;
   final String tanggalSelesai;
 
-  HafalanModel({
-    required this.id,
+  Hafalan({
     required this.nomorSurat,
+    required this.namaSurat,
     required this.tanggalMulai,
     required this.tanggalSelesai,
   });
 
-  factory HafalanModel.fromJson(Map<String, dynamic> json) {
-    return HafalanModel(
-      id: json['id'],
-      nomorSurat: json['nomor_surat'],
-      tanggalMulai: json['tanggal_mulai'],
-      tanggalSelesai: json['tanggal_selesai'],
+  factory Hafalan.fromJson(Map<String, dynamic> json) {
+    return Hafalan(
+      nomorSurat: json['nomor_surat'] ?? 0,
+      namaSurat: json['nama_surat'] ?? 'noData',
+      tanggalMulai: json['tanggal_mulai'] ?? 'noData',
+      tanggalSelesai: json['tanggal_selesai'] ?? 'noData',
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
     'nomor_surat': nomorSurat,
+    'nama_surat': namaSurat,
     'tanggal_mulai': tanggalMulai,
     'tanggal_selesai': tanggalSelesai,
   };

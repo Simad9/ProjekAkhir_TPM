@@ -16,10 +16,10 @@ class Surat {
   factory Surat.fromJson(Map<String, dynamic> json) {
     return Surat(
       nomor: json['nomor'] ?? 0,
-      nama: json['nama'] ?? '',
-      namaLatin: json['namaLatin'] ?? '',
+      nama: json['nama'] ?? 'noData',
+      namaLatin: json['nama_latin'] ?? 'noData',
       jumlahAyat: json['jumlahAyat'] ?? 0,
-      arti: json['arti'] ?? '',
+      arti: json['arti'] ?? 'noData',
     );
   }
 
