@@ -27,12 +27,12 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 - [x] Register
 - [x] Home 
 - [x] List Surat
-- [ ] List Doa
+- [ ] List Doa (opsional)
 - [x] Tambah Hafalan
-- [ ] Detail Hafalan
+- [ ] Detail Hafalan + LBS koordinat
 - [x] Profile = Ada datanya
 - [x] Kesan Pesan = Ada datanya
 - [ ] Sensor (Untuk posisi HP) Ganti jadi buat kalo udah hafalan selesai naik
 - [ ] Notifikasi
-- [ ] Bayar Langanan
-- [ ] Pembayaran Waktu Langganan
+- [x] Bayar Langanan
+- [x] Pembayaran Waktu Langganan

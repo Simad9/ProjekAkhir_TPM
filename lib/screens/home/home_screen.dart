@@ -4,7 +4,6 @@ import 'package:projek_akhir_mobile/services/hafalan_save.dart';
 
 // Services
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,62 +65,60 @@ class _HomeScreenState extends State<HomeScreen> {
               ? Center(child: CircularProgressIndicator())
               : Padding(
                 padding: EdgeInsets.all(8),
-                child: Expanded(
-                  child: FutureBuilder<List<Hafalan>>(
-                    future: _suratListFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('Tidak Ada Data'));
-                      }
-
-                      final suratList = snapshot.data!;
-
-                      return ListView.builder(
-                        itemCount: suratList.length,
-                        itemBuilder: (context, index) {
-                          final surat = suratList[index];
-                          return ListTile(
-                            title: Text(
-                              surat.namaSurat,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    Colors.black, // pastikan warna teks hitam
-                              ),
+                child: FutureBuilder<List<Hafalan>>(
+                  future: _suratListFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('Tidak Ada Data'));
+                    }
+                
+                    final suratList = snapshot.data!;
+                
+                    return ListView.builder(
+                      itemCount: suratList.length,
+                      itemBuilder: (context, index) {
+                        final surat = suratList[index];
+                        return ListTile(
+                          title: Text(
+                            surat.namaSurat,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Colors.black, // pastikan warna teks hitam
                             ),
-                            subtitle: Text(
-                              surat
-                                  .tanggalSelesai, // tampilkan nama asli Arab di subtitle
-                              style: TextStyle(color: Colors.grey[700]),
-                            ),
-                            onTap: () {
-                              // Arahkan ke halaman detail surat
-                              Navigator.pushNamed(
-                                context,
-                                '/detail',
-                                arguments: surat.nomorSurat,
-                              ).then((value) {
-                                if (value != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Gagal mengakses halaman detail',
-                                      ),
+                          ),
+                          subtitle: Text(
+                            surat
+                                .tanggalSelesai, // tampilkan nama asli Arab di subtitle
+                            style: TextStyle(color: Colors.grey[700]),
+                          ),
+                          onTap: () {
+                            // Arahkan ke halaman detail surat
+                            Navigator.pushNamed(
+                              context,
+                              '/detail',
+                              arguments: surat.nomorSurat,
+                            ).then((value) {
+                              if (value != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Gagal mengakses halaman detail',
                                     ),
-                                  );
-                                }
-                              });
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
+                                  ),
+                                );
+                              }
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
     );

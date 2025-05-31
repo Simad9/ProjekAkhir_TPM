@@ -11,6 +11,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.2.1
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.0
   http: ^1.4.0

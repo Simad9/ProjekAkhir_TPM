@@ -4,6 +4,7 @@ class MenuList extends StatelessWidget {
   final String title;
   final IconData icon;
   final void Function() onPress;
+
   const MenuList({
     super.key,
     required this.title,
@@ -16,12 +17,10 @@ class MenuList extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPress,
       icon: Icon(icon),
-      label: Expanded(
-        child: Text(
-          title,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 14),
-        ),
+      label: Text(
+        title,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14),
       ),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

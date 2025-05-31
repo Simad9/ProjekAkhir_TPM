@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projek_akhir_mobile/screens/pages/kesan_tpm_screen.dart';
-import 'package:projek_akhir_mobile/screens/pages/developer_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/sensor_gyro_screen.dart';
 import 'package:projek_akhir_mobile/components/menu_list.dart';
 
@@ -49,10 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Profil",
               icon: Icons.person,
               onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DeveloperScreen()),
-                );
+                Navigator.pushNamed(context, '/dev');
               },
             ),
             SizedBox(height: 16),
@@ -60,10 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Kesan dan Pesan",
               icon: Icons.feedback,
               onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => KesanTpmScreen()),
-                );
+                Navigator.pushNamed(context, '/kesan');
               },
             ),
             SizedBox(height: 16),
@@ -75,6 +67,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context,
                   MaterialPageRoute(builder: (context) => SensorGyroScreen()),
                 );
+              },
+            ),
+            SizedBox(height: 16),
+            MenuList(
+              title: "Berlanganan",
+              icon: Icons.money,
+              onPress: () {
+                Navigator.pushNamed(context, '/berlanganan');
               },
             ),
           ],

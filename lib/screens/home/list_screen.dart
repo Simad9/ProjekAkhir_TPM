@@ -16,6 +16,7 @@ class _ListScreenState extends State<ListScreen> {
   final _searchController = TextEditingController();
   late Future<List<Surat>> _suratListFuture;
   bool _isLoading = false;
+  bool _isSorting = false;
 
   @override
   void initState() {
@@ -75,7 +76,13 @@ class _ListScreenState extends State<ListScreen> {
       _isLoading = true;
     });
     try {
-      _suratListFuture = SuratNetwork().sortDescSurat();
+      if (_isSorting) {
+        _suratListFuture = SuratNetwork().getData();
+        _isSorting = false;
+      } else {
+        _suratListFuture = SuratNetwork().sortDescSurat();
+        _isSorting = true;
+      }
     } catch (e) {
       print(e);
     } finally {
@@ -144,7 +151,11 @@ class _ListScreenState extends State<ListScreen> {
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.filter_list),
+                          icon: Icon(
+                            _isSorting
+                                ? Icons.arrow_upward_rounded
+                                : Icons.arrow_downward_rounded,
+                          ),
                           onPressed: () => _sortDescSurat(),
                         ),
                       ],

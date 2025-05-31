@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../components/button_primary.dart';
 import '../../components/form_input.dart';
 import 'register_screen.dart';
-import '../navigasi_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

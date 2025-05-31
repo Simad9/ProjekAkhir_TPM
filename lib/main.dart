@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
+import 'package:projek_akhir_mobile/screens/home/profile_screen.dart';
 import 'package:projek_akhir_mobile/screens/navigasi_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/berlanganan_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/detail_hafalan_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/developer_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/jadwal_pembayaran_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/kesan_tpm_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/tambah_screen.dart';
+
 // import 'screens/auth/login_screen.dart';
 
 // Testing
-import 'package:projek_akhir_mobile/screens/auth/register_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,13 +28,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF4CA2FF)),
       ),
-      initialRoute: '/',
+      initialRoute: '/profile',
       routes: {
         '/': (context) => LoginScreen(),
         '/login': (context) => LoginScreen(),
         '/home': (context) => NavigasiScreen(),
+        '/profile': (context) => ProfileScreen(),
         '/tambah': (context) => TambahScreen(),
         '/detail': (context) => DetailHafalanScreen(),
+        '/dev': (context) => DeveloperScreen(),
+        '/kesan': (context) => KesanTpmScreen(),
+        '/berlanganan': (context) => BerlangananScreen(),
+        '/jadwal': (context) => JadwalPembayaranScreen(),
       },
     );
   }

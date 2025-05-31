@@ -46,6 +46,15 @@ class UserSave {
     }).toList();
   }
 
+  // Ambil data sesuai username
+  Future<User?> getUserByUsername(String username) async {
+    final userList = await getUserList();
+    for (final user in userList) {
+      if (user.username == username) return user;
+    }
+    return null;
+  }
+
   // Registrasi user
   Future<bool> register(String username, String email, String password) async {
     final userList = await getUserList();
