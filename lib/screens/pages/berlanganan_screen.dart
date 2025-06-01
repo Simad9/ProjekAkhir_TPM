@@ -93,6 +93,7 @@ class _BerlangananScreenState extends State<BerlangananScreen> {
         context,
       ).showSnackBar(const SnackBar(content: Text("Berlanganan berhasil")));
 
+      // Update Data
       final prefs = await SharedPreferences.getInstance();
       final List<String>? userList = prefs.getStringList('user_list');
       if (userList != null) {

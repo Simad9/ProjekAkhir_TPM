@@ -1,7 +1,7 @@
 class Hafalan {
   final int nomorSurat;
   final String namaSurat;
-  final String tanggalMulai;
+  String tanggalMulai;
   final String tanggalSelesai;
 
   Hafalan({

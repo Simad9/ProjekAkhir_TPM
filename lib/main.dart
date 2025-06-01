@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF4CA2FF)),
       ),
-      initialRoute: '/profile',
+      initialRoute: '/home',
       routes: {
         '/': (context) => LoginScreen(),
         '/login': (context) => LoginScreen(),

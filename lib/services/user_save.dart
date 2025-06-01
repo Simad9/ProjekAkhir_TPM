@@ -23,7 +23,7 @@ class UserSave {
 
   // Tambahkan user ke list user yang sudah ada
   Future<bool> addUser(User user) async {
-    final List<User> userList = (await getUserList()) ?? <User>[];
+    final List<User> userList = (await getUserList());
     userList.add(user);
     return await saveUserList(userList);
   }
@@ -84,7 +84,7 @@ class UserSave {
   // Login user
   Future<bool> login(String usernameInput, String passwordInput) async {
     final userList = await getUserList();
-    if (userList == null) return false;
+    if (userList.isEmpty) return false;
     for (final user in userList) {
       if (user.username == usernameInput &&
           user.passwordHash == hashPassword(passwordInput)) {
@@ -93,4 +93,6 @@ class UserSave {
     }
     return false;
   }
+
+  
 }

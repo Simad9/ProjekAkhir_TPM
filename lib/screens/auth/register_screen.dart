@@ -123,13 +123,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               controller: _rePasswordController,
             ),
             SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Lupa password?",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: Text(
+            //     "Lupa password?",
+            //     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            //   ),
+            // ),
             SizedBox(height: 25),
             SizedBox(
               width: double.infinity,

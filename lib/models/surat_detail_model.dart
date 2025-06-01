@@ -6,7 +6,7 @@ class SuratDetail {
   final String tempatTurun;
   final String arti;
   final String deskripsi;
-  final Map<String, String> audioFull; // key audio 01,02,... value url
+  final String audioFull; // ubah dari Map jadi String
   final List<Ayat> ayat;
   final SuratSingkat suratSelanjutnya;
   final SuratSingkat suratSebelumnya;
@@ -26,16 +26,14 @@ class SuratDetail {
   });
 
   factory SuratDetail.fromJson(Map<String, dynamic> json) => SuratDetail(
-    nomor: json['nomor'],
-    nama: json['nama'],
-    namaLatin: json['nama_latin'],
-    jumlahAyat: json['jumlah_ayat'],
-    tempatTurun: json['tempat_turun'],
-    arti: json['arti'],
-    deskripsi: json['deskripsi'],
-    audioFull: Map<String, String>.from(
-      json['audio'] ?? {},
-    ), // perhatikan 'audio' bukan 'audioFull'
+    nomor: json['nomor'] ?? 0,
+    nama: json['nama'] ?? 'noData',
+    namaLatin: json['nama_latin'] ?? 'noData',
+    jumlahAyat: json['jumlah_ayat'] ?? 0,
+    tempatTurun: json['tempat_turun'] ?? 'noData',
+    arti: json['arti'] ?? 'noData',
+    deskripsi: json['deskripsi'] ?? 'noData',
+    audioFull: json['audio'] ?? '',
     ayat:
         (json['ayat'] as List<dynamic>)
             .map((x) => Ayat.fromJson(x as Map<String, dynamic>))
@@ -58,7 +56,7 @@ class SuratDetail {
     'tempatTurun': tempatTurun,
     'arti': arti,
     'deskripsi': deskripsi,
-    'audioFull': audioFull,
+    'audio': audioFull,
     'ayat': ayat.map((x) => x.toJson()).toList(),
     'suratSelanjutnya': suratSelanjutnya.toJson(),
     'suratSebelumnya': suratSebelumnya.toJson(),
@@ -81,13 +79,12 @@ class Ayat {
   });
 
   factory Ayat.fromJson(Map<String, dynamic> json) => Ayat(
-      nomorAyat: json['nomor'],
-      teksArab: json['ar'],
-      teksLatin: json['tr'],
-      teksIndonesia: json['idn'],
-      audio: {}, // karena tidak ada di JSON ini, kosongkan saja
-    );
-
+    nomorAyat: json['nomor'] ?? 0,
+    teksArab: json['ar'] ?? 'noData',
+    teksLatin: json['tr'] ?? 'noData',
+    teksIndonesia: json['idn'] ?? 'noData',
+    audio: {}, // karena tidak ada di JSON ini, kosongkan saja
+  );
 
   Map<String, dynamic> toJson() => {
     'nomorAyat': nomorAyat,
@@ -111,13 +108,12 @@ class SuratSingkat {
     required this.jumlahAyat,
   });
 
- factory SuratSingkat.fromJson(Map<String, dynamic> json) => SuratSingkat(
-      nomor: json['nomor'],
-      nama: json['nama'],
-      namaLatin: json['nama_latin'],
-      jumlahAyat: json['jumlah_ayat'],
-    );
-
+  factory SuratSingkat.fromJson(Map<String, dynamic> json) => SuratSingkat(
+    nomor: json['nomor'] ?? 0,
+    nama: json['nama'] ?? 'noData',
+    namaLatin: json['nama_latin'] ?? 'noData',
+    jumlahAyat: json['jumlah_ayat'] ?? 0,
+  );
 
   Map<String, dynamic> toJson() => {
     'nomor': nomor,

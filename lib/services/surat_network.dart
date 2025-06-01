@@ -4,7 +4,7 @@ import 'package:projek_akhir_mobile/models/surat_detail_model.dart';
 import 'package:projek_akhir_mobile/models/surat_model.dart';
 
 class SuratNetwork {
-  static const String baseUrl = "http://localhost:5000/api/surat";
+  static const String baseUrl = "http://192.168.1.146:5000/api/surat";
 
   Future<List<Surat>> getData() async {
     final response = await http.get(Uri.parse(baseUrl));

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:projek_akhir_mobile/models/konversi_model.dart';
 
 class CurrencyService {
-  final String baseUrl = "http://localhost:5000/api/konversi";
+  final String baseUrl = "http://192.168.1.146:5000/api/konversi";
 
   Future<ApiResponse> fetchCurrencyRates() async {
     final uri = Uri.parse(baseUrl);

@@ -36,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       _suratListFuture = HafalanSave().getHafalan();
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mengambil data: $e')),
+      );
     } finally {
       setState(() {
         _isLoading = false;
