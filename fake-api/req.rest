@@ -1,0 +1,7 @@
+GET http://localhost:5000/api/surat
+
+###
+GET http://localhost:5000/api/surat/1
+
+###
+GET http://localhost:5000/api/konversi

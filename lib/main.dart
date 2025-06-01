@@ -8,12 +8,16 @@ import 'package:projek_akhir_mobile/screens/pages/developer_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/jadwal_pembayaran_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/kesan_tpm_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/tambah_screen.dart';
+import 'package:projek_akhir_mobile/services/notification_service.dart';
 
-// import 'screens/auth/login_screen.dart';
+// Deklarasi GLOBAL untuk NotificationService dan GlobalKey
+late NotificationService notificationService;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(); // PENTING: ini harus ada dan global
 
-// Testing
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  notificationService = NotificationService(); // PENTING: inisialisasi instance global
+  await notificationService.init(); // Panggil init() pada instance global
   runApp(const MyApp());
 }
 
@@ -23,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey, // PENTING: berikan globalKey ke MaterialApp
       title: 'Projek Akhir Mobile',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

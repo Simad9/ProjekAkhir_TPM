@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:projek_akhir_mobile/models/hafalan_model.dart';
+import 'package:projek_akhir_mobile/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HafalanSave {
@@ -37,6 +38,18 @@ class HafalanSave {
 
   // Tambah satu data hafalan baru ke SharedPreferences
   Future<bool> addHafalan(Hafalan newHafalan) async {
+    // Schedule notifikasi pengingat 1 hari sebelum tanggal selesai
+    final notificationService = NotificationService();
+    await notificationService.scheduleHafalanNotification(
+      id: newHafalan.nomorSurat,
+      title: 'Pengingat Hafalan',
+      body: 'Waktumu untuk surat ${newHafalan.namaSurat} hampir habis.',
+      scheduledDate: DateTime.parse(
+        newHafalan.tanggalSelesai,
+      ).subtract(Duration(days: 1)),
+    );
+
+    // Simpan Hafalan
     final List<Hafalan> currentList = await getHafalan();
     currentList.add(newHafalan);
     return await saveHafalanList(currentList);

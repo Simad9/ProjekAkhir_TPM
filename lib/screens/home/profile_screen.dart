@@ -1,6 +1,9 @@
+// profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/screens/pages/sensor_gyro_screen.dart';
 import 'package:projek_akhir_mobile/components/menu_list.dart';
+// Import main.dart untuk mengakses instance global notificationService
+import 'package:projek_akhir_mobile/main.dart';
 
 // Services
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,6 +78,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.money,
               onPress: () {
                 Navigator.pushNamed(context, '/berlanganan');
+              },
+            ),
+            SizedBox(height: 16),
+            MenuList(
+              title: "Test Notifikasi",
+              icon: Icons.notifications_active,
+              onPress: () async {
+                DateTime now = DateTime.now();
+                DateTime testTime = now.add(
+                  Duration(seconds: 1),
+                ); // Coba 2 detik
+                await notificationService.scheduleHafalanNotification(
+                  id: 123,
+                  title: 'Test Notifikasi Instan',
+                  body: 'Ini notifikasi testing segera!',
+                  scheduledDate: testTime,
+                );
               },
             ),
           ],

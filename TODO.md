@@ -14,8 +14,8 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 - [ ] Tambah Hafalan
 - [ ] Detail Hafalan
 - [ ] List Disimpan
-- [x] Profile
-- [x] Kesan Pesan
+- [ ] Profile
+- [ ] Kesan Pesan
 - [ ] Sensor (Untuk posisi HP)
 - [ ] Notifikasi
 - [ ] Bayar Langanan
@@ -38,8 +38,6 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 - [x] Pembayaran Waktu Langganan
 
 ### Detail Fiturnya
-
-### Tujuan Halaman
 
 - Login (session ada) \
    = Login ngambil dari localStorage.

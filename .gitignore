@@ -46,3 +46,4 @@ app.*.map.json
 
 # Tambahan
 .env
+fake-api/node_modules/
