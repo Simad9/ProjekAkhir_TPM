@@ -41,9 +41,9 @@ class HafalanSave {
     // Schedule notifikasi pengingat 1 hari sebelum tanggal selesai
     final notificationService = NotificationService();
     await notificationService.scheduleHafalanNotification(
-      id: newHafalan.nomorSurat,
+      id: newHafalan.id,
       title: 'Pengingat Hafalan',
-      body: 'Waktumu untuk surat ${newHafalan.namaSurat} hampir habis.',
+      body: 'Waktumu untuk surat ${newHafalan.namaHafalan} hampir habis.',
       scheduledDate: DateTime.parse(
         newHafalan.tanggalSelesai,
       ).subtract(Duration(days: 1)),

@@ -1,8 +1,10 @@
+import 'package:projek_akhir_mobile/models/doa_model.dart';
 import 'package:projek_akhir_mobile/models/surat_model.dart';
 import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
 
 // Services
 import 'package:flutter/material.dart';
+import 'package:projek_akhir_mobile/services/doa_network.dart';
 import 'package:projek_akhir_mobile/services/surat_network.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,140 +16,173 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   final _searchController = TextEditingController();
-  late Future<List<Surat>> _suratListFuture;
+  late Future<List<dynamic>>
+  _dataFuture; // Bisa List<Surat> atau List<DoaModel>
   bool _isLoading = false;
   bool _isSorting = false;
+  bool _isSurat = true;
 
   @override
   void initState() {
     super.initState();
-    _suratListFuture = SuratNetwork().getData();
+    _fetchData(isSurat: true);
   }
 
-  void _fetchSuratList() async {
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> _fetchData({
+    required bool isSurat,
+    String? searchQuery,
+    bool sortDesc = false,
+  }) async {
+    setState(() => _isLoading = true);
+
     try {
-      _suratListFuture = SuratNetwork().getData();
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+      if (isSurat) {
+        if (searchQuery != null && searchQuery.isNotEmpty) {
+          _dataFuture = SuratNetwork().searchSurat(searchQuery);
+        } else if (sortDesc) {
+          _dataFuture = SuratNetwork().sortDescSurat();
+        } else {
+          _dataFuture = SuratNetwork().getData();
+        }
+      } else {
+        _dataFuture = DoaNetwork().getData();
+      }
 
-  void _fetchDoaList() async {
-    print("Nanti ambil data doa");
+      _isSurat = isSurat;
+      _isSorting = isSurat ? sortDesc : false;
+    } catch (e) {
+      debugPrint('Fetch data error: $e');
+      // Bisa juga handle error lebih baik dengan setState error variable
+      // dan tampilkan UI error khusus
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('session_token'); // Hapus session token
+    await prefs.remove('session_token');
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ), // Arahkan ke halaman login
+        MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     }
   }
 
-  void _searchSurat(String query) async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      _suratListFuture = SuratNetwork().searchSurat(query);
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _sortDescSurat() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      if (_isSorting) {
-        _suratListFuture = SuratNetwork().getData();
-        _isSorting = false;
-      } else {
-        _suratListFuture = SuratNetwork().sortDescSurat();
-        _isSorting = true;
-      }
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  Widget _buildList<T>(List<T> items) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        if (_isSurat) {
+          final surat = items[index] as Surat;
+          return ListTile(
+            title: Text(
+              surat.namaLatin,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            subtitle: Text(
+              surat.nama,
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/tambah',
+                arguments: {'nomor': surat.nomor, 'nama': surat.namaLatin, 'tipe': 'surat'},
+              );
+            },
+          );
+        } else {
+          final doa = items[index] as DoaModel;
+          return ListTile(
+            title: Text(
+              doa.doa,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            subtitle: Text(doa.ayat, style: TextStyle(color: Colors.grey[700])),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/tambah',
+                arguments: {'nomor': int.parse(doa.id), 'nama': doa.doa, 'tipe': 'doa'},
+              );
+            },
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("List Surat"),
+        title: const Text("List Surat"),
         actions: [
-          IconButton(icon: Icon(Icons.logout), onPressed: () => logout()),
+          IconButton(icon: const Icon(Icons.logout), onPressed: logout),
         ],
       ),
       body:
           _isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Padding(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () => _fetchSuratList(),
+                          onPressed: () => _fetchData(isSurat: true),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
                           ),
-                          child: Text("Surat"),
+                          child: const Text("Surat"),
                         ),
                         ElevatedButton(
-                          onPressed: () => _fetchDoaList(),
+                          onPressed: () => _fetchData(isSurat: false),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
                           ),
-                          child: Text("Doa"),
+                          child: const Text("Doa"),
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
                             controller: _searchController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Cari Surat',
                             ),
                             onFieldSubmitted: (value) {
-                              _searchSurat(value);
+                              if (_isSurat)
+                                _fetchData(isSurat: true, searchQuery: value);
                             },
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.search),
+                          icon: const Icon(Icons.search),
                           onPressed: () {
-                            _searchSurat(_searchController.text);
+                            if (_isSurat)
+                              _fetchData(
+                                isSurat: true,
+                                searchQuery: _searchController.text,
+                              );
                           },
                         ),
                         IconButton(
@@ -156,62 +191,33 @@ class _ListScreenState extends State<ListScreen> {
                                 ? Icons.arrow_upward_rounded
                                 : Icons.arrow_downward_rounded,
                           ),
-                          onPressed: () => _sortDescSurat(),
+                          onPressed: () {
+                            if (_isSurat) {
+                              _fetchData(isSurat: true, sortDesc: !_isSorting);
+                            }
+                          },
                         ),
                       ],
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Expanded(
-                      child: FutureBuilder<List<Surat>>(
-                        future: _suratListFuture,
+                      child: FutureBuilder<List<dynamic>>(
+                        future: _dataFuture,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           } else if (snapshot.hasError) {
                             return Center(
                               child: Text('Error: ${snapshot.error}'),
                             );
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return Center(child: Text('No movies found.'));
+                            return const Center(child: Text('No data found.'));
                           }
-
-                          final suratList = snapshot.data!;
-
-                          return ListView.builder(
-                            itemCount: suratList.length,
-                            itemBuilder: (context, index) {
-                              final surat = suratList[index];
-                              return ListTile(
-                                title: Text(
-                                  surat.namaLatin,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        Colors
-                                            .black, // pastikan warna teks hitam
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  surat
-                                      .nama, // tampilkan nama asli Arab di subtitle
-                                  style: TextStyle(color: Colors.grey[700]),
-                                ),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/tambah',
-                                    arguments: {
-                                      'nomor': surat.nomor,
-                                      'nama': surat.namaLatin,
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          );
+                          return _buildList(snapshot.data!);
                         },
                       ),
                     ),

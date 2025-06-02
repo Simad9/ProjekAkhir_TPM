@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Hafalan>> _suratListFuture;
+  late Future<List<dynamic>> _hafalanListFuture;
   bool _isLoading = false;
 
   @override
@@ -34,11 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true;
     });
     try {
-      _suratListFuture = HafalanSave().getHafalan();
+      _hafalanListFuture = HafalanSave().getHafalan();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengambil data: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal mengambil data: $e')));
     } finally {
       setState(() {
         _isLoading = false;
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('session_token'); // Hapus session token
     await prefs.remove('username');
-    Navigator.pushReplacementNamed(context, '/');
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
   @override
@@ -67,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ? Center(child: CircularProgressIndicator())
               : Padding(
                 padding: EdgeInsets.all(8),
-                child: FutureBuilder<List<Hafalan>>(
-                  future: _suratListFuture,
+                child: FutureBuilder<List<dynamic>>(
+                  future: _hafalanListFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -77,26 +77,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(child: Text('Tidak Ada Data'));
                     }
-                
-                    final suratList = snapshot.data!;
-                
+
+                    final dataList = snapshot.data!;
+
                     return ListView.builder(
-                      itemCount: suratList.length,
+                      itemCount: dataList.length,
                       itemBuilder: (context, index) {
-                        final surat = suratList[index];
+                        final data = dataList[index];
                         return ListTile(
                           title: Text(
-                            surat.namaSurat,
+                            data.namaHafalan,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color:
-                                  Colors.black, // pastikan warna teks hitam
+                              color: Colors.black, // pastikan warna teks hitam
                             ),
                           ),
                           subtitle: Text(
-                            surat
-                                .tanggalSelesai, // tampilkan nama asli Arab di subtitle
+                            data.tanggalSelesai, // tampilkan nama asli Arab di subtitle
                             style: TextStyle(color: Colors.grey[700]),
                           ),
                           onTap: () {
@@ -104,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.pushNamed(
                               context,
                               '/detail',
-                              arguments: surat.nomorSurat,
+                              arguments: {'id': data.id, 'idHafalan': data.idHafalan, 'tipeHafalan': data.tipeHafalan},
                             ).then((value) {
                               if (value != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(

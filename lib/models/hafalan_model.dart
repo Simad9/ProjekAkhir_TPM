@@ -1,28 +1,36 @@
 class Hafalan {
-  final int nomorSurat;
-  final String namaSurat;
+  final int id;
+  final int idHafalan;
+  final String namaHafalan;
+  final String tipeHafalan;
   String tanggalMulai;
   final String tanggalSelesai;
 
   Hafalan({
-    required this.nomorSurat,
-    required this.namaSurat,
+    required this.id,
+    required this.idHafalan,
+    required this.namaHafalan,
+    required this.tipeHafalan,
     required this.tanggalMulai,
     required this.tanggalSelesai,
   });
 
   factory Hafalan.fromJson(Map<String, dynamic> json) {
     return Hafalan(
-      nomorSurat: json['nomor_surat'] ?? 0,
-      namaSurat: json['nama_surat'] ?? 'noData',
+      id: json['id'] ?? 0,
+      idHafalan: json['nomor_surat'] ?? 0,
+      namaHafalan: json['nama_surat'] ?? 'noData',
+      tipeHafalan: json['tipe_hafalan'] ?? 'noData',
       tanggalMulai: json['tanggal_mulai'] ?? 'noData',
       tanggalSelesai: json['tanggal_selesai'] ?? 'noData',
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'nomor_surat': nomorSurat,
-    'nama_surat': namaSurat,
+    'id': id,
+    'nomor_surat': idHafalan,
+    'nama_surat': namaHafalan,
+    'tipe_hafalan': tipeHafalan,
     'tanggal_mulai': tanggalMulai,
     'tanggal_selesai': tanggalSelesai,
   };

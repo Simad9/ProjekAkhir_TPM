@@ -4,6 +4,8 @@ const cors = require("cors");
 const data = require("./data/surat.js");
 const dataSuratSatu = require("./data/detailSuratSatu.js");
 const dataKonversi = require("./data/dataKonversi.js");
+const dataDoa = require("./data/dataDoa.js");
+const dataDoaSatu = require("./data/dataDoaSatu.js");
 
 const app = express();
 const port = 5000;
@@ -24,6 +26,16 @@ app.get("/api/surat/:nomor", (req, res) => {
 
 app.get("/api/konversi/", (req, res) => {
   res.status(200).json(dataKonversi);
+});
+
+app.get("/api", (req, res) => {
+  res.status(200).json(dataDoa);
+});
+
+app.get("/api/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  if (id != 1) return res.status(404).send("Surat tidak ditemukan");
+  res.status(200).json(dataDoaSatu);
 });
 
 app.listen(port, () => {

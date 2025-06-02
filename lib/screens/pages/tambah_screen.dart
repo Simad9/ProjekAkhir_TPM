@@ -18,6 +18,7 @@ class _TambahScreenState extends State<TambahScreen> {
   final _tanggalSelesaiController = TextEditingController();
   int? _nomorSurat;
   String? _namaSurat;
+  String? _tipeHafalan;
   bool _isLoading = false;
   String? _error;
 
@@ -37,6 +38,7 @@ class _TambahScreenState extends State<TambahScreen> {
     if (args != null && _nomorSurat == null) {
       _nomorSurat = args['nomor'];
       _namaSurat = args['nama'];
+      _tipeHafalan = args['tipe'];
       _nomorSuratController.text = _nomorSurat.toString();
       _namaSuratController.text = _namaSurat.toString();
     }
@@ -74,9 +76,13 @@ class _TambahScreenState extends State<TambahScreen> {
       _error = null;
     });
     try {
+      final hafalanList = await HafalanSave().getHafalan();
+      final newId = hafalanList.isNotEmpty ? hafalanList.last.id + 1 : 1;
       Hafalan newHafalan = Hafalan(
-        nomorSurat: int.parse(_nomorSuratController.text),
-        namaSurat: _namaSuratController.text,
+        id: newId,
+        idHafalan: int.parse(_nomorSuratController.text),
+        namaHafalan: _namaSuratController.text,
+        tipeHafalan: _tipeHafalan ?? 'noData',
         tanggalMulai: _tanggalMulaiController.text,
         tanggalSelesai: _tanggalSelesaiController.text,
       );
