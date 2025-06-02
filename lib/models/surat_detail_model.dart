@@ -28,9 +28,9 @@ class SuratDetail {
   factory SuratDetail.fromJson(Map<String, dynamic> json) => SuratDetail(
     nomor: json['nomor'] ?? 0,
     nama: json['nama'] ?? 'noData',
-    namaLatin: json['nama_latin'] ?? 'noData',
-    jumlahAyat: json['jumlah_ayat'] ?? 0,
-    tempatTurun: json['tempat_turun'] ?? 'noData',
+    namaLatin: json['namaLatin'] ?? 'noData',
+    jumlahAyat: json['jumlahAyat'] ?? 0,
+    tempatTurun: json['tempatTurun'] ?? 'noData',
     arti: json['arti'] ?? 'noData',
     deskripsi: json['deskripsi'] ?? 'noData',
     audioFull: json['audio'] ?? '',
@@ -79,10 +79,10 @@ class Ayat {
   });
 
   factory Ayat.fromJson(Map<String, dynamic> json) => Ayat(
-    nomorAyat: json['nomor'] ?? 0,
-    teksArab: json['ar'] ?? 'noData',
-    teksLatin: json['tr'] ?? 'noData',
-    teksIndonesia: json['idn'] ?? 'noData',
+    nomorAyat: json['nomorAyat'] ?? 0,
+    teksArab: json['teksArab'] ?? 'noData',
+    teksLatin: json['teksLatin'] ?? 'noData',
+    teksIndonesia: json['teksIndonesia'] ?? 'noData',
     audio: {}, // karena tidak ada di JSON ini, kosongkan saja
   );
 
@@ -111,8 +111,8 @@ class SuratSingkat {
   factory SuratSingkat.fromJson(Map<String, dynamic> json) => SuratSingkat(
     nomor: json['nomor'] ?? 0,
     nama: json['nama'] ?? 'noData',
-    namaLatin: json['nama_latin'] ?? 'noData',
-    jumlahAyat: json['jumlah_ayat'] ?? 0,
+    namaLatin: json['namaLatin'] ?? 'noData',
+    jumlahAyat: json['jumlahAyat'] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {

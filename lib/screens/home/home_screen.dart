@@ -55,24 +55,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _scheduleReminderIfNeeded() async {
     bool adaBelumSelesai = await HafalanSave().adaHafalanBelumSelesai();
-    if (adaBelumSelesai) {
-      final now = DateTime.now();
-      final scheduledTime = DateTime(now.year, now.month, now.day, 8, 0, 0);
-      DateTime schedule =
-          scheduledTime.isBefore(now)
-              ? scheduledTime.add(Duration(days: 1))
-              : scheduledTime;
 
-      await _notificationService.scheduleNotification(
-        id: 1,
-        title: 'Ingat Hafalanmu!',
-        body: 'Masih ada surat yang belum selesai dihafal. Yuk lanjutkan!',
-        scheduledTime: schedule,
-        payload: 'hafalan',
-      );
-    } else {
-      // Kalau semua selesai, bisa cancel notif yg pernah dijadwalkan
-      await _notificationService.flutterLocalNotificationsPlugin.cancel(1);
+    final now = DateTime.now();
+    final scheduledTime = DateTime(now.year, now.month, now.day, 0, 30, 0);
+
+    if (now.hour == scheduledTime.hour &&
+        now.minute == scheduledTime.minute &&
+        now.second == scheduledTime.second) {
+      if (adaBelumSelesai) {
+        await NotificationService().showNotification(
+          id: 1,
+          title: 'Ingat Hafalanmu!',
+          body: 'Masih ada surat yang belum selesai dihafal. Yuk lanjutkan!',
+          payload: 'hafalan',
+        );
+      } else {
+        // Kalau semua selesai, bisa cancel notif yg pernah dijadwalkan
+        await _notificationService.flutterLocalNotificationsPlugin.cancel(1);
+      }
     }
   }
 
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         subtitle: Text(
-                          data.tanggalSelesai,
+                          'Selesai sampai = ${data.tanggalSelesai}',
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                         onTap: () {

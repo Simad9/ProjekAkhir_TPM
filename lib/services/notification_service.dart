@@ -8,7 +8,6 @@ class NotificationService {
   factory NotificationService() {
     return _instance;
   }
-
   NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -25,10 +24,12 @@ class NotificationService {
       android: androidSettings,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings,
-        onDidReceiveNotificationResponse: (details) {
-      // Handler klik notifikasi
-    });
+    await flutterLocalNotificationsPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (details) {
+        // Handler klik notifikasi
+      },
+    );
   }
 
   Future<void> showNotification({
@@ -37,17 +38,19 @@ class NotificationService {
     String? body,
     String? payload,
   }) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'my_channel_id',
-      'my_channel_name',
-      channelDescription: 'my_channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+          'my_channel_id',
+          'my_channel_name',
+          channelDescription: 'my_channel_description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
 
-    const NotificationDetails platformDetails =
-        NotificationDetails(android: androidDetails);
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+    );
 
     await flutterLocalNotificationsPlugin.show(
       id,
@@ -58,38 +61,38 @@ class NotificationService {
     );
   }
 
-  Future<void> scheduleNotification({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime scheduledTime,
-    String? payload,
-  }) async {
-    final androidDetails = AndroidNotificationDetails(
-      'my_channel_id',
-      'my_channel_name',
-      channelDescription: 'my_channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+  // Untuk jadwal notifikasi = Masih Error
+  // Future<void> scheduleNotification({
+  //   required int id,
+  //   required String title,
+  //   required String body,
+  //   required DateTime scheduledTime,
+  //   String? payload,
+  // }) async {
+  //   final androidDetails = AndroidNotificationDetails(
+  //     'my_channel_id',
+  //     'my_channel_name',
+  //     channelDescription: 'my_channel_description',
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //   );
 
-    final notificationDetails = NotificationDetails(android: androidDetails);
+  //   final notificationDetails = NotificationDetails(android: androidDetails);
 
-    // Konversi ke timezone lokal
-    final tzScheduled = tz.TZDateTime.from(scheduledTime, tz.local);
+  //   final tzScheduled = tz.TZDateTime.from(scheduledTime, tz.local);
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tzScheduled,
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      // Jika mau ulang setiap hari pada jam yg sama:
-      matchDateTimeComponents: DateTimeComponents.time,
-      payload: payload,
-    );
-  }
+  //   await flutterLocalNotificationsPlugin.zonedSchedule(
+  //     id,
+  //     title,
+  //     body,
+  //     tzScheduled,
+  //     notificationDetails,
+  //     androidAllowWhileIdle: false,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //     // Untuk notifikasi berulang setiap hari jam yg sama:
+  //     matchDateTimeComponents: DateTimeComponents.time,
+  //     payload: payload,
+  //   );
+  // }
 }

@@ -16,7 +16,7 @@ class _TambahScreenState extends State<TambahScreen> {
   final _namaSuratController = TextEditingController();
   final _tanggalMulaiController = TextEditingController();
   final _tanggalSelesaiController = TextEditingController();
-
+  late int _idDariAPI;
   String? _namaSurat;
   String? _tipeHafalan;
   bool _isLoading = false;
@@ -48,6 +48,7 @@ class _TambahScreenState extends State<TambahScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null && _namaSurat == null) {
+      _idDariAPI = args['nomor'];
       _namaSurat = args['nama'];
       _tipeHafalan = args['tipe'];
       _namaSuratController.text = _namaSurat.toString();
@@ -90,7 +91,7 @@ class _TambahScreenState extends State<TambahScreen> {
       final newId = hafalanList.isNotEmpty ? hafalanList.last.id + 1 : 1;
       Hafalan newHafalan = Hafalan(
         id: newId,
-        idHafalan: newId, // Since nomor surat dihapus, pakai id baru
+        idHafalan: _idDariAPI, 
         namaHafalan: _namaSuratController.text,
         tipeHafalan: _tipeHafalan ?? 'noData',
         tanggalMulai: _tanggalMulaiController.text,

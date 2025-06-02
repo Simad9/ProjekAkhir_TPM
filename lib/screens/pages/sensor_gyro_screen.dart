@@ -44,7 +44,7 @@ class _SensorGyroScreenState extends State<SensorGyroScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Container(
-            color: _x >= 5 || _x <= -5 ? Colors.red : Colors.white,
+            padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -74,13 +74,13 @@ class _SensorGyroScreenState extends State<SensorGyroScreen> {
                 SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
-                    color: _x >= 5 || _x <= -5 ? Colors.red : Colors.green,
+                    color: _x >= 5 || _x <= -5 ? Colors.green : Colors.red,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   padding: const EdgeInsets.all(18),
                   alignment: Alignment.center,
                   child: Text(
-                    _x >= 5 || _x <= -5 ? "Belum Selesai" : "Selesai",
+                    _x >= 5 || _x <= -5 ? "Selesa" : "iBelum Selesai",
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

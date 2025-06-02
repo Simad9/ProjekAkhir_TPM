@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:projek_akhir_mobile/models/doa_model.dart';
 
 class DoaNetwork {
-  static const String baseUrl = "http://192.168.1.146:5000/api";
+  // static const String baseUrl = "http://192.168.1.146:5000/api";
+  static const String baseUrl = "https://doa-doa-api-ahmadramadhan.fly.dev/api";
 
   Future<List<DoaModel>> getData() async {
     final response = await http.get(Uri.parse(baseUrl));
