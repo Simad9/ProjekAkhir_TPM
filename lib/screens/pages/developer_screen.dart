@@ -34,7 +34,7 @@ class _DeveloperScreenState extends State<DeveloperScreen> {
           padding: const EdgeInsets.all(16),
           children: [
             _anggotaList(
-              "lib/assets/images/logo.png",
+              "lib/assets/images/wijdan.JPG",
               "Wijdan Akhmad S",
               "123220010",
             ),

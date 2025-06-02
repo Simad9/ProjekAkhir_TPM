@@ -69,7 +69,7 @@ class _KesanTpmScreenState extends State<KesanTpmScreen> {
                   ),
                   Expanded(
                     child: Text(
-                      "Fitur tugas dikurangi, biar gak kebanyakan. Semester 6 sungguh padat tugasnya wkwk",
+                      "Untuk matkul mobile, projek akhirnya dikasih tau lebih awal + kriteria, biar mahasiswanya gak teteran dengan projek projek yang lain. Itu pesan saya, dan sepertinya salah saya juga gak bisa manage waktu sih",
                       style: TextStyle(fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 5,
