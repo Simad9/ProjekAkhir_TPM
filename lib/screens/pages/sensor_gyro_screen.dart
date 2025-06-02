@@ -36,23 +36,41 @@ class _SensorGyroScreenState extends State<SensorGyroScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sensor Gyro Screen',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  'Tujuan',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'This screen is designed to display information related to the gyroscope sensor.',
+                  'Halaman ini berguna untuk kamu yang mau test gyro pada Hp kamu. Pada projek ini berguna untuk selesai hafalan dengan sensor gyro',
                   style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 32),
+                SizedBox(height: 24),
                 Text(
                   'Gyroscope Data:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
                 Text('Gyro X: ${_x.toStringAsFixed(3)}'),
                 Text('Gyro Y: ${_y.toStringAsFixed(3)}'),
                 Text('Gyro Z: ${_z.toStringAsFixed(3)}'),
+                SizedBox(height: 24),
+                Text(
+                  'Implementasi pada Aplikasi:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    color: _x >= 5 || _x <= -5 ? Colors.red : Colors.green,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  padding: const EdgeInsets.all(18),
+                  alignment: Alignment.center,
+                  child: Text(
+                    _x >= 5 || _x <= -5 ? "Belum Selesai" : "Selesai",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
               ],
             ),
           ),

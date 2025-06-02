@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projek_akhir_mobile/models/hafalan_model.dart';
 import 'package:projek_akhir_mobile/services/hafalan_save.dart';
 
 // Services

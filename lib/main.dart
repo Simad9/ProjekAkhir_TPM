@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
+import 'package:projek_akhir_mobile/screens/auth/register_screen.dart';
 import 'package:projek_akhir_mobile/screens/home/profile_screen.dart';
 import 'package:projek_akhir_mobile/screens/navigasi_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/berlanganan_screen.dart';
@@ -12,11 +13,13 @@ import 'package:projek_akhir_mobile/services/notification_service.dart';
 
 // Deklarasi GLOBAL untuk NotificationService dan GlobalKey
 late NotificationService notificationService;
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>(); // PENTING: ini harus ada dan global
+final GlobalKey<NavigatorState> navigatorKey =
+    GlobalKey<NavigatorState>(); // PENTING: ini harus ada dan global
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  notificationService = NotificationService(); // PENTING: inisialisasi instance global
+  notificationService =
+      NotificationService(); // PENTING: inisialisasi instance global
   await notificationService.init(); // Panggil init() pada instance global
   runApp(const MyApp());
 }
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(),
         '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
         '/home': (context) => NavigasiScreen(),
         '/profile': (context) => ProfileScreen(),
         '/tambah': (context) => TambahScreen(),

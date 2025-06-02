@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../../components/button_primary.dart';
 import '../../components/form_input.dart';
-import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +16,22 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _cekUsername().then((value) {
+      if (value) {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      }
+    });
+  }
+
+  Future<bool> _cekUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    return username != null;
+  }
 
   Future<void> _login() async {
     if (usernameController.text.isNotEmpty ||
@@ -33,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('session_token', session);
         await prefs.setString('username', usernameController.text);
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       } else {
         await showDialog(
           context: context,
@@ -73,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Pake emailmu dan password untuk ",
+                  "Pake usernammu dan password untuk ",
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
@@ -84,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 25),
             FormInput(
-              hint: "Email",
-              icon: Icons.email_outlined,
+              hint: "Username",
+              icon: Icons.person_outline,
               controller: usernameController,
             ),
             SizedBox(height: 10),
@@ -118,9 +133,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("Kamu belum punya akun? "),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      '/register',
+                      (route) => false,
                     );
                   },
                   child: Text(

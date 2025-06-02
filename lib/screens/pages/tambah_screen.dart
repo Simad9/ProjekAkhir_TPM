@@ -108,7 +108,7 @@ class _TambahScreenState extends State<TambahScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tambah Hafalan')),
+      appBar: AppBar(title: Text('Tambah Hafalan'), centerTitle: true),
       body:
           _isLoading || _nomorSurat == null
               ? Center(child: CircularProgressIndicator())

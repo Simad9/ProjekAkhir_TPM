@@ -95,7 +95,7 @@ class _JadwalPembayaranScreenState extends State<JadwalPembayaranScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jadwal Pembayaran')),
+      appBar: AppBar(title: const Text('Jadwal Pembayaran'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child:

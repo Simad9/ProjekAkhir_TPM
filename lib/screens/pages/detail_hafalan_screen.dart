@@ -19,6 +19,7 @@ class DetailHafalanScreen extends StatefulWidget {
 
 class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
   Future<dynamic>? _detailFuture;
+  int? _id;
   int? _idHafalan;
   String? _tipeHafalan;
   String? _locationMessage;
@@ -46,8 +47,11 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map<String, dynamic>) {
       _idHafalan = args['idHafalan'] as int?;
+      _id = args['id'] as int?;
       _tipeHafalan = args['tipeHafalan'] as String?;
     }
+
+    print('idHafalan: $_idHafalan, tipeHafalan: $_tipeHafalan, id: $_id');
 
     if (_idHafalan != null && _tipeHafalan != null) {
       _detailFuture = _fetchDetail(_idHafalan!, _tipeHafalan!);
@@ -106,7 +110,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
     }
 
     final List<Hafalan> hafalanList = await HafalanSave().getHafalan();
-    final index = hafalanList.indexWhere((h) => h.id == _idHafalan);
+    final index = hafalanList.indexWhere((h) => h.id == _id);
     if (index == -1) {
       debugPrint('Hafalan dengan id=$_idHafalan tidak ditemukan');
       return;
@@ -119,11 +123,15 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
     tanggalMulai = tanggalMulai.add(const Duration(days: 1));
     if (tanggalMulai.isAfter(tanggalSelesai)) {
       hafalanList.removeAt(index);
-      debugPrint('Hafalan dengan id=$_idHafalan dihapus (tanggalMulai > tanggalSelesai)');
+      debugPrint(
+        'Hafalan dengan id=$_idHafalan dihapus (tanggalMulai > tanggalSelesai)',
+      );
     } else {
       hafalan.tanggalMulai = tanggalMulai.toIso8601String();
       hafalanList[index] = hafalan;
-      debugPrint('Tanggal mulai hafalan id=$_idHafalan diperbarui ke $tanggalMulai');
+      debugPrint(
+        'Tanggal mulai hafalan id=$_idHafalan diperbarui ke $tanggalMulai',
+      );
     }
 
     final success = await HafalanSave().saveHafalanList(hafalanList);
@@ -145,28 +153,29 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Detail Hafalan')),
-      body: _detailFuture == null
-          ? const Center(child: Text('Data tidak tersedia'))
-          : FutureBuilder<dynamic>(
-              future: _detailFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text('Tidak Ada Data'));
-                }
+      body:
+          _detailFuture == null
+              ? const Center(child: Text('Data tidak tersedia'))
+              : FutureBuilder<dynamic>(
+                future: _detailFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData) {
+                    return const Center(child: Text('Tidak Ada Data'));
+                  }
 
-                if (_tipeHafalan == 'surat') {
-                  final surat = snapshot.data as SuratDetail;
-                  return _buildSuratDetail(surat);
-                } else {
-                  final doa = snapshot.data as DoaModel;
-                  return _buildDoaDetail(doa);
-                }
-              },
-            ),
+                  if (_tipeHafalan == 'surat') {
+                    final surat = snapshot.data as SuratDetail;
+                    return _buildSuratDetail(surat);
+                  } else {
+                    final doa = snapshot.data as DoaModel;
+                    return _buildDoaDetail(doa);
+                  }
+                },
+              ),
     );
   }
 
@@ -214,10 +223,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
                   title: Text("${ayat.nomorAyat}. ${ayat.teksArab}"),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(ayat.teksLatin),
-                      Text(ayat.teksIndonesia),
-                    ],
+                    children: [Text(ayat.teksLatin), Text(ayat.teksIndonesia)],
                   ),
                   minLeadingWidth: 0,
                 );
@@ -234,14 +240,14 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
       padding: const EdgeInsets.all(16),
       child: ListView(
         children: [
+          const Text('Doa:', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(doa.doa),
           const Text('Latin:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(doa.latin),
           const SizedBox(height: 12),
           const Text('Ayat:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(doa.ayat),
           const SizedBox(height: 12),
-          const Text('Doa:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.doa),
           const SizedBox(height: 12),
           const Text('Artinya:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(doa.artinya),

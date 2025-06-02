@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Register berhasil")));
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Akun Sudah Terdaftar, coba dengna yang lain")),
@@ -139,17 +139,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             SizedBox(height: 25),
-            Text("Atau Masuk pake", style: TextStyle(fontSize: 14)),
+            // Text("Atau Masuk pake", style: TextStyle(fontSize: 14)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Kamu belum punya akun? "),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
+                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                   },
                   child: Text(
                     "Masuk",

@@ -24,11 +24,15 @@ class DoaNetwork {
     final response = await http.get(Uri.parse('$baseUrl/$id'));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> decoded = json.decode(response.body);
-      return DoaModel.fromJson(decoded);
+      final List<dynamic> decodedList = json.decode(response.body);
+      if (decodedList.isNotEmpty) {
+        // Ambil objek pertama dari list
+        return DoaModel.fromJson(decodedList[0] as Map<String, dynamic>);
+      } else {
+        throw Exception("Data detail kosong");
+      }
     } else {
       throw Exception("Failed to load detail data");
     }
   }
-  
 }
