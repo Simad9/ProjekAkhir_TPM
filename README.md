@@ -23,14 +23,12 @@ https://equran.id/apidev/v2 \
 
 Pengerjaan saya di : [To Do](TODO.md)
 
-
-
 ## Konsep Aplikasi
 
 Syarat Tugas Akhir :
 
 - Login menggunakan enkripsi disimpan di session (nanti mau sesuai DB atau engga) ✅
-- Terkoneksi database (nanti pake Hive aja ngikut praktikum)✅
+- Terkoneksi database (nanti pake SharedPreference)✅
 - Menggunakan API ✅
 - Fitur LBS✅
 - Terdapat menu navigasi :
@@ -38,7 +36,7 @@ Syarat Tugas Akhir :
   - Menu saran mata kuliah ✅
   - Logout ✅
 - Konversi mata uang mengikuti konsep✅
-- Konversi waktu (minimal WIB, WIT, WITA) mengikuti konsep✅
+- Konversi waktu (minimal WIB, WIT, WITA, London) mengikuti konsep✅
 - Fitur Searching ✅
 - Fitur Notifikasi✅
 - Sensor sederhana ✅

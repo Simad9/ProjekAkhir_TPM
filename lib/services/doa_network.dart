@@ -35,4 +35,17 @@ class DoaNetwork {
       throw Exception("Failed to load detail data");
     }
   }
+
+  Future<List<DoaModel>> searchDoa(String query) async {
+    final data = await getData(); // Fetch all data
+    return data.where((doa) {
+      final lowerCaseQuery = query.toLowerCase();
+      return doa.doa.toLowerCase().contains(lowerCaseQuery);
+    }).toList();
+  }
+
+  Future<List<DoaModel>> sortDescSurat() async {
+    final data = await getData(); // Fetch all data
+    return data.reversed.toList();
+  }
 }

@@ -51,7 +51,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
       _tipeHafalan = args['tipeHafalan'] as String?;
     }
 
-    print('idHafalan: $_idHafalan, tipeHafalan: $_tipeHafalan, id: $_id');
+    debugPrint('idHafalan: $_idHafalan, tipeHafalan: $_tipeHafalan, id: $_id');
 
     if (_idHafalan != null && _tipeHafalan != null) {
       _detailFuture = _fetchDetail(_idHafalan!, _tipeHafalan!);
@@ -190,26 +190,53 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
             children: [
               Flexible(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Nomor Surat: ${suratDetail.nomor}'),
-                    Text('Nama Surat: ${suratDetail.nama}'),
-                    Text('Nama Latin: ${suratDetail.namaLatin}'),
-                    Text('Jumlah Ayat: ${suratDetail.jumlahAyat}'),
-                    Text('Arti: ${suratDetail.arti}'),
+                    // Baris Nama Latin - Nama
+                    Text(
+                      '${suratDetail.namaLatin} - ${suratDetail.nama}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    // Baris Surat ke - 1       Total Ayat = 7
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Surat ke - ${suratDetail.nomor}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Total Ayat ${suratDetail.jumlahAyat}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Arti = ${suratDetail.arti}',
+                            style: const TextStyle(fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Turun di = ${suratDetail.tempatTurun}',
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.right,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ),
-              Column(
-                children: [
-                  Text(_locationMessage ?? 'Getting location...'),
-                  const SizedBox(height: 10),
-                  ElevatedButton.icon(
-                    onPressed: selesaiHafalan,
-                    label: const Text("Selesai"),
-                    icon: const Icon(Icons.check),
-                  ),
-                ],
               ),
             ],
           ),
@@ -230,6 +257,25 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
               },
             ),
           ),
+
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              _locationMessage ?? 'Getting location...',
+              style: const TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: selesaiHafalan,
+              label: const Text("Selesai Hafalan Surat"),
+              icon: const Icon(Icons.check),
+            ),
+          ),
         ],
       ),
     );
@@ -240,17 +286,33 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
       padding: const EdgeInsets.all(16),
       child: ListView(
         children: [
-          const Text('Doa:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.doa),
-          const Text('Latin:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.latin),
-          const SizedBox(height: 12),
+          Text(
+            doa.doa,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
           const Text('Ayat:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.ayat),
-          const SizedBox(height: 12),
-          const SizedBox(height: 12),
+          Text(doa.ayat, style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
+          const Text('Latin:', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(doa.latin, style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
           const Text('Artinya:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.artinya),
+          Text(doa.artinya, style: const TextStyle(fontSize: 16)),
+
+          const SizedBox(height: 16),
+          Text(
+            _locationMessage ?? 'Getting location...',
+            style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            onPressed: selesaiHafalan,
+            label: const Text("Selesai Hafalan Doa"),
+            icon: const Icon(Icons.check),
+          ),
         ],
       ),
     );

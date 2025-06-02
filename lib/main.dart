@@ -8,6 +8,8 @@ import 'package:projek_akhir_mobile/screens/pages/detail_hafalan_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/developer_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/jadwal_pembayaran_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/kesan_tpm_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/list_hafalan_screen.dart';
+import 'package:projek_akhir_mobile/screens/pages/list_user_screen.dart';
 import 'package:projek_akhir_mobile/screens/pages/tambah_screen.dart';
 import 'package:projek_akhir_mobile/services/notification_service.dart';
 
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
         '/kesan': (context) => KesanTpmScreen(),
         '/berlanganan': (context) => BerlangananScreen(),
         '/jadwal': (context) => JadwalPembayaranScreen(),
+        '/user': (context) => ListUserScreen(),
+        '/hafalan': (context) => ListHafalanScreen(),
       },
     );
   }

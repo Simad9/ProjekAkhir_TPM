@@ -33,7 +33,24 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true;
     });
     try {
-      _hafalanListFuture = HafalanSave().getHafalan();
+      _hafalanListFuture = HafalanSave().getHafalanHariIni();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal mengambil data: $e')));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchSuratListBesok() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      _hafalanListFuture = HafalanSave().getHafalanBesok();
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -61,65 +78,81 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(icon: Icon(Icons.logout), onPressed: () => logout()),
         ],
       ),
-      body:
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Padding(
-                padding: EdgeInsets.all(8),
-                child: FutureBuilder<List<dynamic>>(
-                  future: _hafalanListFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(child: Text('Tidak Ada Data'));
-                    }
+      body: Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Text(
+              'Hafalan Saya',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 12),
+            // ElevatedButton(
+            //   child: Text('ambil besok'),
+            //   onPressed: _isLoading ? null : _fetchSuratListBesok,
+            // ),
+            Expanded(
+              child: FutureBuilder<List<dynamic>>(
+                future: _hafalanListFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('Tidak Ada Data'));
+                  }
 
-                    final dataList = snapshot.data!;
+                  final dataList = snapshot.data!;
 
-                    return ListView.builder(
-                      itemCount: dataList.length,
-                      itemBuilder: (context, index) {
-                        final data = dataList[index];
-                        return ListTile(
-                          title: Text(
-                            data.namaHafalan,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // pastikan warna teks hitam
-                            ),
+                  return ListView.builder(
+                    itemCount: dataList.length,
+                    itemBuilder: (context, index) {
+                      final data = dataList[index];
+                      return ListTile(
+                        title: Text(
+                          data.namaHafalan,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                          subtitle: Text(
-                            data.tanggalSelesai, // tampilkan nama asli Arab di subtitle
-                            style: TextStyle(color: Colors.grey[700]),
-                          ),
-                          onTap: () {
-                            // Arahkan ke halaman detail surat
-                            Navigator.pushNamed(
-                              context,
-                              '/detail',
-                              arguments: {'id': data.id, 'idHafalan': data.idHafalan, 'tipeHafalan': data.tipeHafalan},
-                            ).then((value) {
-                              if (value != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Gagal mengakses halaman detail',
-                                    ),
+                        ),
+                        subtitle: Text(
+                          data.tanggalSelesai,
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/detail',
+                            arguments: {
+                              'id': data.id,
+                              'idHafalan': data.idHafalan,
+                              'tipeHafalan': data.tipeHafalan,
+                            },
+                          ).then((value) {
+                            if (value != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Gagal mengakses halaman detail',
                                   ),
-                                );
-                              }
-                            });
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
+                                ),
+                              );
+                            }
+                          });
+                        },
+                      );
+                    },
+                  );
+                },
               ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

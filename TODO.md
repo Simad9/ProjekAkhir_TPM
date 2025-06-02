@@ -9,17 +9,17 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 
 - [x] Login
 - [x] Register
-- [ ] Home
-- [ ] List Surat & List Doa
-- [ ] Tambah Hafalan
-- [ ] Detail Hafalan
-- [ ] List Disimpan
-- [ ] Profile
-- [ ] Kesan Pesan
-- [ ] Sensor (Untuk posisi HP)
+- [x] Home
+- [x] List Surat & List Doa
+- [x] Tambah Hafalan
+- [x] Detail Hafalan
+- [x] List Disimpan (user dan hafalan)
+- [x] Profile
+- [x] Kesan Pesan
+- [x] Sensor (Untuk posisi HP)
 - [ ] Notifikasi
-- [ ] Bayar Langanan
-- [ ] Pembayaran Waktu Langganan
+- [x] Bayar Langanan
+- [x] Pembayaran Waktu Langganan
 
 ### Tujuan Halaman
 
@@ -27,7 +27,7 @@ Nampilin Surat sudah bisa, terus nambahin ke penyimapanan lokal berhasil
 - [x] Register
 - [x] Home
 - [x] List Surat
-- [ ] List Doa (opsional)
+- [x] List Doa (opsional)
 - [x] Tambah Hafalan
 - [x] Detail Hafalan + LBS koordinat
 - [x] Profile = Ada datanya

@@ -18,7 +18,7 @@ class Surat {
       nomor: json['nomor'] ?? 0,
       nama: json['nama'] ?? 'noData',
       namaLatin: json['nama_latin'] ?? 'noData',
-      jumlahAyat: json['jumlahAyat'] ?? 0,
+      jumlahAyat: json['jumlah_ayat'] ?? 0,
       arti: json['arti'] ?? 'noData',
     );
   }

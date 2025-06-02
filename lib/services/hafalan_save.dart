@@ -22,12 +22,27 @@ class HafalanSave {
     return hafalanList
         .where(
           (element) =>
-              DateTime.parse(element.tanggalMulai).isAfter(today) &&
-              DateTime.parse(
-                element.tanggalSelesai,
-              ).isBefore(today.add(Duration(days: 1))),
+              DateTime.parse(element.tanggalMulai).isAtSameMomentAs(today) ||
+              (DateTime.parse(element.tanggalMulai).isBefore(today) &&
+                  DateTime.parse(element.tanggalSelesai).isAfter(today)),
         )
         .toList();
+  }
+
+  Future<List<Hafalan>> getHafalanBesok() async {
+    final DateTime now = DateTime.now();
+    final DateTime besok = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).add(Duration(days: 1));
+    final List<Hafalan> hafalanList = await getHafalan();
+    return hafalanList.where((element) {
+      final tanggalMulai = DateTime.parse(element.tanggalMulai);
+      final tanggalSelesai = DateTime.parse(element.tanggalSelesai);
+      return tanggalMulai.isAtSameMomentAs(besok) ||
+          (tanggalMulai.isBefore(besok) && tanggalSelesai.isAfter(besok));
+    }).toList();
   }
 
   Future<List<Hafalan>> getHafalan() async {

@@ -82,6 +82,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 16),
             MenuList(
+              title: "List Akun",
+              icon: Icons.group,
+              onPress: () {
+                Navigator.pushNamed(context, '/user');
+              },
+            ),
+            SizedBox(height: 16),
+            MenuList(
+              title: "List Hafalan",
+              icon: Icons.book,
+              onPress: () {
+                Navigator.pushNamed(context, '/hafalan');
+              },
+            ),
+            SizedBox(height: 16),
+            MenuList(
               title: "Test Notifikasi",
               icon: Icons.notifications_active,
               onPress: () async {

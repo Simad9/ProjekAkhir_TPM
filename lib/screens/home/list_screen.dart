@@ -1,23 +1,20 @@
-import 'package:projek_akhir_mobile/models/doa_model.dart';
-import 'package:projek_akhir_mobile/models/surat_model.dart';
-import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
-
-// Services
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/services/doa_network.dart';
 import 'package:projek_akhir_mobile/services/surat_network.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:projek_akhir_mobile/models/surat_model.dart';
+import 'package:projek_akhir_mobile/models/doa_model.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
+
   @override
   State<ListScreen> createState() => _ListScreenState();
 }
 
 class _ListScreenState extends State<ListScreen> {
   final _searchController = TextEditingController();
-  late Future<List<dynamic>>
-  _dataFuture; // Bisa List<Surat> atau List<DoaModel>
+  late Future<List<dynamic>> _dataFuture;
   bool _isLoading = false;
   bool _isSorting = false;
   bool _isSurat = true;
@@ -34,26 +31,33 @@ class _ListScreenState extends State<ListScreen> {
     bool sortDesc = false,
   }) async {
     setState(() => _isLoading = true);
-
     try {
+      print(searchQuery);
       if (isSurat) {
         if (searchQuery != null && searchQuery.isNotEmpty) {
           _dataFuture = SuratNetwork().searchSurat(searchQuery);
         } else if (sortDesc) {
+          print("serting");
           _dataFuture = SuratNetwork().sortDescSurat();
         } else {
           _dataFuture = SuratNetwork().getData();
         }
       } else {
-        _dataFuture = DoaNetwork().getData();
+        if (searchQuery != null && searchQuery.isNotEmpty) {
+          print("cari doa");
+          _dataFuture = DoaNetwork().searchDoa(searchQuery);
+        } else if (sortDesc) {
+          print("serting");
+          _dataFuture = DoaNetwork().sortDescSurat();
+        } else {
+          _dataFuture = DoaNetwork().getData();
+        }
       }
 
       _isSurat = isSurat;
       _isSorting = isSurat ? sortDesc : false;
     } catch (e) {
       debugPrint('Fetch data error: $e');
-      // Bisa juga handle error lebih baik dengan setState error variable
-      // dan tampilkan UI error khusus
     } finally {
       setState(() => _isLoading = false);
     }
@@ -63,10 +67,7 @@ class _ListScreenState extends State<ListScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('session_token');
     if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     }
   }
 
@@ -77,23 +78,50 @@ class _ListScreenState extends State<ListScreen> {
         if (_isSurat) {
           final surat = items[index] as Surat;
           return ListTile(
-            title: Text(
-              surat.namaLatin,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  surat.namaLatin,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  surat.nama,
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              ],
             ),
-            subtitle: Text(
-              surat.nama,
-              style: TextStyle(color: Colors.grey[700]),
+            subtitle: Column(
+              children: [
+                SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Arti: ${surat.arti}',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    Text(
+                      'Jumlah Ayat: ${surat.jumlahAyat}',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ],
             ),
             onTap: () {
               Navigator.pushNamed(
                 context,
                 '/tambah',
-                arguments: {'nomor': surat.nomor, 'nama': surat.namaLatin, 'tipe': 'surat'},
+                arguments: {
+                  'nomor': surat.nomor,
+                  'nama': surat.namaLatin,
+                  'tipe': 'surat',
+                },
               );
             },
           );
@@ -108,12 +136,31 @@ class _ListScreenState extends State<ListScreen> {
                 color: Colors.black,
               ),
             ),
-            subtitle: Text(doa.ayat, style: TextStyle(color: Colors.grey[700])),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //     Text(doa.ayat, style: TextStyle(color: Colors.grey[700])),
+                //     SizedBox(height: 6),
+                //     Text(
+                //       'Latin: ${doa.latin}',
+                //       style: TextStyle(color: Colors.grey[600]),
+                //     ),
+                SizedBox(height: 2),
+                Text(
+                  'Artinya: ${doa.artinya}',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ],
+            ),
             onTap: () {
               Navigator.pushNamed(
                 context,
                 '/tambah',
-                arguments: {'nomor': int.parse(doa.id), 'nama': doa.doa, 'tipe': 'doa'},
+                arguments: {
+                  'nomor': int.parse(doa.id),
+                  'nama': doa.doa,
+                  'tipe': 'doa',
+                },
               );
             },
           );
@@ -126,7 +173,7 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List Surat"),
+        title: const Text("List Surat dan Doa"),
         actions: [
           IconButton(icon: const Icon(Icons.logout), onPressed: logout),
         ],
@@ -167,22 +214,31 @@ class _ListScreenState extends State<ListScreen> {
                             controller: _searchController,
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Cari Surat',
+                              labelText: 'Cari Surat atau Doa',
                             ),
                             onFieldSubmitted: (value) {
-                              if (_isSurat)
+                              if (_isSurat) {
                                 _fetchData(isSurat: true, searchQuery: value);
+                              } else {
+                                _fetchData(isSurat: false, searchQuery: value);
+                              }
                             },
                           ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
-                            if (_isSurat)
+                            if (_isSurat) {
                               _fetchData(
                                 isSurat: true,
                                 searchQuery: _searchController.text,
                               );
+                            } else {
+                              _fetchData(
+                                isSurat: false,
+                                searchQuery: _searchController.text,
+                              );
+                            }
                           },
                         ),
                         IconButton(
@@ -194,6 +250,8 @@ class _ListScreenState extends State<ListScreen> {
                           onPressed: () {
                             if (_isSurat) {
                               _fetchData(isSurat: true, sortDesc: !_isSorting);
+                            } else {
+                              _fetchData(isSurat: false, sortDesc: !_isSorting);
                             }
                           },
                         ),
