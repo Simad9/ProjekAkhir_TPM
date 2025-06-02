@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:projek_akhir_mobile/models/hafalan_model.dart';
-import 'package:projek_akhir_mobile/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HafalanSave {
@@ -53,20 +52,27 @@ class HafalanSave {
 
   // Tambah satu data hafalan baru ke SharedPreferences
   Future<bool> addHafalan(Hafalan newHafalan) async {
-    // Schedule notifikasi pengingat 1 hari sebelum tanggal selesai
-    final notificationService = NotificationService();
-    await notificationService.scheduleHafalanNotification(
-      id: newHafalan.id,
-      title: 'Pengingat Hafalan',
-      body: 'Waktumu untuk surat ${newHafalan.namaHafalan} hampir habis.',
-      scheduledDate: DateTime.parse(
-        newHafalan.tanggalSelesai,
-      ).subtract(Duration(days: 1)),
-    );
-
     // Simpan Hafalan
     final List<Hafalan> currentList = await getHafalan();
     currentList.add(newHafalan);
     return await saveHafalanList(currentList);
+  }
+
+  Future<bool> adaHafalanBelumSelesai() async {
+    final List<Hafalan> allHafalan = await getHafalan();
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+
+    for (var hafalan in allHafalan) {
+      DateTime mulai = DateTime.parse(hafalan.tanggalMulai);
+      DateTime selesai = DateTime.parse(hafalan.tanggalSelesai);
+
+      // Jika hari ini masih di antara tanggalMulai dan tanggalSelesai artinya belum selesai
+      if ((mulai.isBefore(today) || mulai.isAtSameMomentAs(today)) &&
+          (selesai.isAfter(today) || selesai.isAtSameMomentAs(today))) {
+        return true; // Ada hafalan belum selesai
+      }
+    }
+    return false; // Semua hafalan sudah selesai
   }
 }

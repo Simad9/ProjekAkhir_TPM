@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/services/hafalan_save.dart';
+import 'package:projek_akhir_mobile/services/notification_service.dart';
 
 // Services
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,11 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<dynamic>> _hafalanListFuture;
   bool _isLoading = false;
 
+  final NotificationService _notificationService = NotificationService();
+
   @override
   void initState() {
     super.initState();
     cekSession();
     _fetchSuratList();
+    _scheduleReminderIfNeeded();
   }
 
   Future<void> cekSession() async {
@@ -49,6 +53,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _scheduleReminderIfNeeded() async {
+    bool adaBelumSelesai = await HafalanSave().adaHafalanBelumSelesai();
+    if (adaBelumSelesai) {
+      final now = DateTime.now();
+      final scheduledTime = DateTime(now.year, now.month, now.day, 8, 0, 0);
+      DateTime schedule =
+          scheduledTime.isBefore(now)
+              ? scheduledTime.add(Duration(days: 1))
+              : scheduledTime;
+
+      await _notificationService.scheduleNotification(
+        id: 1,
+        title: 'Ingat Hafalanmu!',
+        body: 'Masih ada surat yang belum selesai dihafal. Yuk lanjutkan!',
+        scheduledTime: schedule,
+        payload: 'hafalan',
+      );
+    } else {
+      // Kalau semua selesai, bisa cancel notif yg pernah dijadwalkan
+      await _notificationService.flutterLocalNotificationsPlugin.cancel(1);
+    }
+  }
+
+  // Titip Fungsi --> Buat Bukti aja
   Future<void> _fetchSuratListBesok() async {
     setState(() {
       _isLoading = true;

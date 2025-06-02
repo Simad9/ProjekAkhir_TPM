@@ -38,7 +38,6 @@ class _ListHafalanScreenState extends State<ListHafalanScreen> {
       return;
     }
 
-    Hafalan hafalan = hafalanList[index];
     hafalanList.removeAt(index);
     final success = await HafalanSave().saveHafalanList(hafalanList);
     if (success) {

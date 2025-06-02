@@ -1,11 +1,7 @@
-// profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/screens/pages/sensor_gyro_screen.dart';
 import 'package:projek_akhir_mobile/components/menu_list.dart';
-// Import main.dart untuk mengakses instance global notificationService
-import 'package:projek_akhir_mobile/main.dart';
-
-// Services
+import 'package:projek_akhir_mobile/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projek_akhir_mobile/screens/auth/login_screen.dart';
 
@@ -17,6 +13,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final NotificationService _notificationService = NotificationService();
+
   @override
   void initState() {
     super.initState();
@@ -39,29 +37,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ), // Arahkan ke halaman login
+        MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     }
+  }
+
+  Future<void> _showNotification() async {
+    await _notificationService.showNotification(
+      id: 0,
+      title: 'Aplikasi Hafalan',
+      body: 'Notifikasi Aplikasi muncul, tapi ini hanya testing',
+      payload: 'data tambahan',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
         actions: [
-          IconButton(icon: Icon(Icons.logout), onPressed: () => logout()),
+          IconButton(icon: const Icon(Icons.logout), onPressed: () => logout()),
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             MenuList(
               title: "Profil",
               icon: Icons.person,
@@ -69,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/dev');
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "Kesan dan Pesan",
               icon: Icons.feedback,
@@ -77,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/kesan');
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "Sensor Gyro - Baguskah Posisi Menghafal",
               icon: Icons.edgesensor_high,
@@ -88,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "Berlanganan",
               icon: Icons.money,
@@ -96,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/berlanganan');
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "List Akun",
               icon: Icons.group,
@@ -104,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/user');
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "List Hafalan",
               icon: Icons.book,
@@ -112,21 +117,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/hafalan');
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             MenuList(
               title: "Test Notifikasi",
               icon: Icons.notifications_active,
               onPress: () async {
-                DateTime now = DateTime.now();
-                DateTime testTime = now.add(
-                  Duration(seconds: 1),
-                ); // Coba 2 detik
-                await notificationService.scheduleHafalanNotification(
-                  id: 123,
-                  title: 'Test Notifikasi Instan',
-                  body: 'Ini notifikasi testing segera!',
-                  scheduledDate: testTime,
-                );
+                await _showNotification();
               },
             ),
           ],
