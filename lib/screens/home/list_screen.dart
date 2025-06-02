@@ -22,7 +22,18 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
+      cekSession();
     _fetchData(isSurat: true);
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   Future<void> _fetchData({

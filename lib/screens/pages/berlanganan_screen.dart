@@ -22,7 +22,18 @@ class _BerlangananScreenState extends State<BerlangananScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
     _cekPembayaran();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   Future<void> _cekPembayaran() async {
@@ -164,10 +175,7 @@ class _BerlangananScreenState extends State<BerlangananScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Berlanganan"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text("Berlanganan"), centerTitle: true),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),

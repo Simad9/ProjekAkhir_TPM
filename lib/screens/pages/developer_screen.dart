@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DeveloperScreen extends StatelessWidget {
+class DeveloperScreen extends StatefulWidget {
   const DeveloperScreen({super.key});
+
+  @override
+  State<DeveloperScreen> createState() => _DeveloperScreenState();
+}
+
+class _DeveloperScreenState extends State<DeveloperScreen> {
+  @override
+  void initState() {
+    super.initState();
+    cekSession();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

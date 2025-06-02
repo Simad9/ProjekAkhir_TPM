@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projek_akhir_mobile/models/hafalan_model.dart';
 import 'package:projek_akhir_mobile/services/hafalan_save.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TambahScreen extends StatefulWidget {
   const TambahScreen({super.key});
@@ -24,9 +25,21 @@ class _TambahScreenState extends State<TambahScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
+
     _tanggalMulaiController.text = DateFormat(
       'yyyy-MM-dd',
     ).format(DateTime.now());
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   @override

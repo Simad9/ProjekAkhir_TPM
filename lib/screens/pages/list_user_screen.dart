@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/models/user_model.dart';
 import 'package:projek_akhir_mobile/services/user_save.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListUserScreen extends StatefulWidget {
   const ListUserScreen({super.key});
@@ -15,7 +16,18 @@ class _ListUserScreenState extends State<ListUserScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
     _userListFuture = UserSave().getUserList();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   @override

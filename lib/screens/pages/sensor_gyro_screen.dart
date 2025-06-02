@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SensorGyroScreen extends StatefulWidget {
   @override
@@ -14,6 +15,8 @@ class _SensorGyroScreenState extends State<SensorGyroScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
+
     gyroscopeEvents.listen((GyroscopeEvent event) {
       setState(() {
         _x = event.x;
@@ -21,6 +24,16 @@ class _SensorGyroScreenState extends State<SensorGyroScreen> {
         _z = event.z;
       });
     });
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   @override

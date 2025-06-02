@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class KesanTpmScreen extends StatelessWidget {
+class KesanTpmScreen extends StatefulWidget {
   const KesanTpmScreen({super.key});
+
+  @override
+  State<KesanTpmScreen> createState() => _KesanTpmScreenState();
+}
+
+class _KesanTpmScreenState extends State<KesanTpmScreen> {
+  @override
+  void initState() {
+    super.initState();
+    cekSession();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

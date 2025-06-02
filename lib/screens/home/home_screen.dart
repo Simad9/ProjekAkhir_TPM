@@ -22,10 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchSuratList();
   }
 
-  Future<bool> cekSession() async {
+  Future<void> cekSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sessionToken = prefs.getString('session_token');
-    return sessionToken != null;
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   Future<void> _fetchSuratList() async {

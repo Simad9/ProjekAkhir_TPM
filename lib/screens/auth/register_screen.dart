@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/services/user_save.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/button_primary.dart';
 import '../../components/form_input.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,6 +16,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _rePasswordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _cekUsername().then((value) {
+      if (value) {
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      }
+    });
+  }
+
+  Future<bool> _cekUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    return username != null;
+  }
 
   @override
   void dispose() {
@@ -146,7 +162,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Text("Kamu belum punya akun? "),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/login',
+                      (route) => false,
+                    );
                   },
                   child: Text(
                     "Masuk",

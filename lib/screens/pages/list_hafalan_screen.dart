@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projek_akhir_mobile/models/hafalan_model.dart';
 import 'package:projek_akhir_mobile/services/hafalan_save.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListHafalanScreen extends StatefulWidget {
   const ListHafalanScreen({super.key});
@@ -15,7 +16,18 @@ class _ListHafalanScreenState extends State<ListHafalanScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
     _hafalanListFuture = HafalanSave().getHafalan();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   void hapusData(int id) async {

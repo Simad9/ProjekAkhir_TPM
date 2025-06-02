@@ -29,6 +29,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
   @override
   void initState() {
     super.initState();
+    cekSession();
 
     _gyroscopeSubscription = gyroscopeEvents.listen((event) {
       if (!_alreadySelesai && (event.x >= 5 || event.x <= -5)) {
@@ -38,6 +39,16 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
     });
 
     _requestAndGetLocation();
+  }
+
+  Future<void> cekSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionToken = prefs.getString('session_token');
+    String? username = prefs.getString('username');
+
+    if (sessionToken == null || username == null) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   @override
