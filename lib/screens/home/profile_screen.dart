@@ -34,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('session_token'); // Hapus session token
+    await prefs.remove('username');
     if (mounted) {
       Navigator.pushReplacement(
         context,
@@ -74,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/dev');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "Kesan dan Pesan",
               icon: Icons.feedback,
@@ -82,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/kesan');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "Sensor Gyro - Baguskah Posisi Menghafal",
               icon: Icons.edgesensor_high,
@@ -93,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "Berlanganan",
               icon: Icons.money,
@@ -101,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/berlanganan');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "List Akun",
               icon: Icons.group,
@@ -109,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/user');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "List Hafalan",
               icon: Icons.book,
@@ -117,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pushNamed(context, '/hafalan');
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             MenuList(
               title: "Test Notifikasi",
               icon: Icons.notifications_active,

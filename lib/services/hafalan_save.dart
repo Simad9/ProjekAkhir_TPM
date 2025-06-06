@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:projek_akhir_mobile/models/hafalan_model.dart';
+import 'package:projek_akhir_mobile/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HafalanSave {
   static const String hafalanKey = 'hafalan';
+  final NotificationService _notificationService = NotificationService();
 
   // Simpan list lengkap (overwrite)
   Future<bool> saveHafalanList(List<Hafalan> hafalanList) async {
@@ -55,6 +57,16 @@ class HafalanSave {
     // Simpan Hafalan
     final List<Hafalan> currentList = await getHafalan();
     currentList.add(newHafalan);
+
+    // Notif Penyemangat
+    await _notificationService.showNotification(
+      id: 0,
+      title: 'Hafalan Tambah',
+      body:
+          'Semangat, hafalan baru telah ditambahkan! Kamu sedang menggali pahala. Tetap semangat dan jangan lupa bismillahirrahmanirrahim.',
+      payload: 'data tambahan',
+    );
+
     return await saveHafalanList(currentList);
   }
 

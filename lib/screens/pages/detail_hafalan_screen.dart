@@ -163,7 +163,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Hafalan')),
+      appBar: AppBar(title: const Text('Detail Hafalan'), centerTitle: true),
       body:
           _detailFuture == null
               ? const Center(child: Text('Data tidak tersedia'))
@@ -196,74 +196,106 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Column(
-                  children: [
-                    // Baris Nama Latin - Nama
-                    Text(
-                      '${suratDetail.namaLatin} - ${suratDetail.nama}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+          Container(
+            padding: const EdgeInsets.all(8),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      // Baris Nama Latin - Nama
+                      Text(
+                        '${suratDetail.namaLatin} - ${suratDetail.nama}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    // Baris Surat ke - 1       Total Ayat = 7
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Surat ke - ${suratDetail.nomor}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Total Ayat ${suratDetail.jumlahAyat}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Arti = ${suratDetail.arti}',
+                      const SizedBox(height: 8),
+                      // Baris Surat ke - 1       Total Ayat = 7
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Surat ke - ${suratDetail.nomor}',
                             style: const TextStyle(fontSize: 16),
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Turun di = ${suratDetail.tempatTurun}',
+                          Text(
+                            '${suratDetail.jumlahAyat} Ayat ',
                             style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.right,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Arti : ${suratDetail.arti}',
+                              style: const TextStyle(fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Turun di ${suratDetail.tempatTurun}',
+                              style: const TextStyle(fontSize: 16),
+                              textAlign: TextAlign.right,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+
           const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: suratDetail.ayat.length,
               itemBuilder: (context, index) {
                 final ayat = suratDetail.ayat[index];
-                return ListTile(
-                  title: Text("${ayat.nomorAyat}. ${ayat.teksArab}"),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(ayat.teksLatin), Text(ayat.teksIndonesia)],
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    tileColor: Colors.grey[200],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    title: Text(
+                      "${ayat.nomorAyat}. ${ayat.teksArab}",
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      textAlign: TextAlign.right,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ayat.teksLatin,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                        Text(
+                          ayat.teksIndonesia,
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    minLeadingWidth: 0,
                   ),
-                  minLeadingWidth: 0,
                 );
               },
             ),
@@ -287,6 +319,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
               icon: const Icon(Icons.check),
             ),
           ),
+          SizedBox(height: 40),
         ],
       ),
     );
@@ -304,7 +337,11 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
           ),
           const SizedBox(height: 16),
           const Text('Ayat:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(doa.ayat, style: const TextStyle(fontSize: 16)),
+          Text(
+            doa.ayat,
+            style: const TextStyle(fontSize: 18),
+            textAlign: TextAlign.right,
+          ),
           const SizedBox(height: 8),
           const Text('Latin:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(doa.latin, style: const TextStyle(fontSize: 16)),
@@ -312,7 +349,7 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
           const Text('Artinya:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(doa.artinya, style: const TextStyle(fontSize: 16)),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 40),
           Text(
             _locationMessage ?? 'Getting location...',
             style: const TextStyle(fontSize: 16),
@@ -321,8 +358,12 @@ class _DetailHafalanScreenState extends State<DetailHafalanScreen> {
           const SizedBox(height: 10),
           ElevatedButton.icon(
             onPressed: selesaiHafalan,
-            label: const Text("Selesai Hafalan Doa"),
-            icon: const Icon(Icons.check),
+            label: const Text(
+              "Selesai Hafalan Doa",
+              style: TextStyle(color: Colors.white),
+            ),
+            icon: const Icon(Icons.check, color: Colors.white),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
           ),
         ],
       ),

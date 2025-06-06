@@ -101,6 +101,44 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
+  String _formatDate(String date) {
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate =
+        "${dateTime.day} ${_bulan(dateTime.month)} ${dateTime.year}";
+    return formattedDate;
+  }
+
+  String _bulan(int bulan) {
+    switch (bulan) {
+      case 1:
+        return "Januari";
+      case 2:
+        return "Februari";
+      case 3:
+        return "Maret";
+      case 4:
+        return "April";
+      case 5:
+        return "Mei";
+      case 6:
+        return "Juni";
+      case 7:
+        return "Juli";
+      case 8:
+        return "Agustus";
+      case 9:
+        return "September";
+      case 10:
+        return "Oktober";
+      case 11:
+        return "November";
+      case 12:
+        return "Desember";
+      default:
+        return "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,40 +180,51 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: dataList.length,
                     itemBuilder: (context, index) {
                       final data = dataList[index];
-                      return ListTile(
-                        title: Text(
-                          data.namaHafalan,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
                           ),
-                        ),
-                        subtitle: Text(
-                          'Selesai sampai = ${data.tanggalSelesai}',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/detail',
-                            arguments: {
-                              'id': data.id,
-                              'idHafalan': data.idHafalan,
-                              'tipeHafalan': data.tipeHafalan,
-                            },
-                          ).then((value) {
-                            if (value != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Gagal mengakses halaman detail',
+                          tileColor: Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          title: Text(
+                            data.namaHafalan,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${_formatDate(data.tanggalMulai)} s/d ${_formatDate(data.tanggalSelesai)}',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/detail',
+                              arguments: {
+                                'id': data.id,
+                                'idHafalan': data.idHafalan,
+                                'tipeHafalan': data.tipeHafalan,
+                              },
+                            ).then((value) {
+                              if (value != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Gagal mengakses halaman detail',
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          });
-                        },
+                                );
+                              }
+                            });
+                          },
+                        ),
                       );
                     },
                   );

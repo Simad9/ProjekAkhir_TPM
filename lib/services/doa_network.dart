@@ -45,7 +45,7 @@ class DoaNetwork {
     }).toList();
   }
 
-  Future<List<DoaModel>> sortDescSurat() async {
+  Future<List<DoaModel>> sortDescDoa() async {
     final data = await getData(); // Fetch all data
     return data.reversed.toList();
   }

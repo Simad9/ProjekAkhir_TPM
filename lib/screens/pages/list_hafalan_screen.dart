@@ -53,7 +53,7 @@ class _ListHafalanScreenState extends State<ListHafalanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('List User')),
+      appBar: AppBar(title: const Text('List Hafalan')),
       body: FutureBuilder<List<Hafalan>>(
         future: _hafalanListFuture,
         builder: (context, snapshot) {

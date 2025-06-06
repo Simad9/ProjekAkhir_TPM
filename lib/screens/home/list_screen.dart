@@ -22,7 +22,7 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
-      cekSession();
+    cekSession();
     _fetchData(isSurat: true);
   }
 
@@ -43,30 +43,28 @@ class _ListScreenState extends State<ListScreen> {
   }) async {
     setState(() => _isLoading = true);
     try {
-      print(searchQuery);
       if (isSurat) {
         if (searchQuery != null && searchQuery.isNotEmpty) {
           _dataFuture = SuratNetwork().searchSurat(searchQuery);
         } else if (sortDesc) {
-          print("serting");
           _dataFuture = SuratNetwork().sortDescSurat();
         } else {
           _dataFuture = SuratNetwork().getData();
         }
       } else {
         if (searchQuery != null && searchQuery.isNotEmpty) {
-          print("cari doa");
           _dataFuture = DoaNetwork().searchDoa(searchQuery);
         } else if (sortDesc) {
-          print("serting");
-          _dataFuture = DoaNetwork().sortDescSurat();
+          _dataFuture = DoaNetwork().sortDescDoa();
         } else {
           _dataFuture = DoaNetwork().getData();
         }
       }
 
-      _isSurat = isSurat;
-      _isSorting = isSurat ? sortDesc : false;
+      setState(() {
+        _isSurat = isSurat;
+        _isSorting = sortDesc;
+      });
     } catch (e) {
       debugPrint('Fetch data error: $e');
     } finally {
@@ -77,6 +75,7 @@ class _ListScreenState extends State<ListScreen> {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('session_token');
+    await prefs.remove('username');
     if (mounted) {
       Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     }
@@ -88,92 +87,112 @@ class _ListScreenState extends State<ListScreen> {
       itemBuilder: (context, index) {
         if (_isSurat) {
           final surat = items[index] as Surat;
-          return ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  surat.namaLatin,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              tileColor: Colors.grey[200],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    surat.namaLatin,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                Text(
-                  surat.nama,
-                  style: const TextStyle(fontSize: 18, color: Colors.black),
-                ),
-              ],
-            ),
-            subtitle: Column(
-              children: [
-                SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Arti: ${surat.arti}',
-                      style: TextStyle(color: Colors.grey[600]),
+                  Text(
+                    surat.nama,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.blueAccent,
                     ),
-                    Text(
-                      'Jumlah Ayat: ${surat.jumlahAyat}',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${surat.arti} | ',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      Text(
+                        '${surat.jumlahAyat} Ayat',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/tambah',
+                  arguments: {
+                    'nomor': surat.nomor,
+                    'nama': surat.namaLatin,
+                    'tipe': 'surat',
+                  },
+                );
+              },
             ),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/tambah',
-                arguments: {
-                  'nomor': surat.nomor,
-                  'nama': surat.namaLatin,
-                  'tipe': 'surat',
-                },
-              );
-            },
           );
         } else {
           final doa = items[index] as DoaModel;
-          return ListTile(
-            title: Text(
-              doa.doa,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
               ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //     Text(doa.ayat, style: TextStyle(color: Colors.grey[700])),
-                //     SizedBox(height: 6),
-                //     Text(
-                //       'Latin: ${doa.latin}',
-                //       style: TextStyle(color: Colors.grey[600]),
-                //     ),
-                SizedBox(height: 2),
-                Text(
-                  'Artinya: ${doa.artinya}',
-                  style: TextStyle(color: Colors.grey[600]),
+              tileColor: Colors.grey[200],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              title: Text(
+                doa.doa,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-              ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 2),
+                  Text(
+                    'Artinya: ${doa.artinya}',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/tambah',
+                  arguments: {
+                    'nomor': int.parse(doa.id),
+                    'nama': doa.doa,
+                    'tipe': 'doa',
+                  },
+                );
+              },
             ),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/tambah',
-                arguments: {
-                  'nomor': int.parse(doa.id),
-                  'nama': doa.doa,
-                  'tipe': 'doa',
-                },
-              );
-            },
           );
         }
       },
@@ -197,23 +216,31 @@ class _ListScreenState extends State<ListScreen> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () => _fetchData(isSurat: true),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => _fetchData(isSurat: true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  _isSurat ? Colors.blue : Colors.white,
+                              foregroundColor:
+                                  _isSurat ? Colors.white : Colors.black,
+                            ),
+                            child: const Text("Surat"),
                           ),
-                          child: const Text("Surat"),
                         ),
-                        ElevatedButton(
-                          onPressed: () => _fetchData(isSurat: false),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => _fetchData(isSurat: false),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  !_isSurat ? Colors.blue : Colors.white,
+                              foregroundColor:
+                                  !_isSurat ? Colors.white : Colors.black,
+                            ),
+                            child: const Text("Doa"),
                           ),
-                          child: const Text("Doa"),
                         ),
                       ],
                     ),
@@ -221,54 +248,83 @@ class _ListScreenState extends State<ListScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            controller: _searchController,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Cari Surat atau Doa',
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: TextFormField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                label: Text("Cari Surat atau Doa"),
+                              ),
+                              onFieldSubmitted: (value) {
+                                if (_isSurat) {
+                                  _fetchData(isSurat: true, searchQuery: value);
+                                } else {
+                                  _fetchData(
+                                    isSurat: false,
+                                    searchQuery: value,
+                                  );
+                                }
+                              },
                             ),
-                            onFieldSubmitted: (value) {
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        // Button Search
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: IconButton(
+                            color: Colors.black,
+                            icon: const Icon(Icons.search),
+                            onPressed: () {
                               if (_isSurat) {
-                                _fetchData(isSurat: true, searchQuery: value);
+                                _fetchData(
+                                  isSurat: true,
+                                  searchQuery: _searchController.text,
+                                );
                               } else {
-                                _fetchData(isSurat: false, searchQuery: value);
+                                _fetchData(
+                                  isSurat: false,
+                                  searchQuery: _searchController.text,
+                                );
                               }
                             },
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            if (_isSurat) {
-                              _fetchData(
-                                isSurat: true,
-                                searchQuery: _searchController.text,
-                              );
-                            } else {
-                              _fetchData(
-                                isSurat: false,
-                                searchQuery: _searchController.text,
-                              );
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            _isSorting
-                                ? Icons.arrow_upward_rounded
-                                : Icons.arrow_downward_rounded,
+                        SizedBox(width: 5),
+                        // Button Sorting
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: IconButton(
+                            color: Colors.black,
+                            icon: Icon(
+                              _isSorting
+                                  ? Icons.arrow_upward_rounded
+                                  : Icons.arrow_downward_rounded,
+                            ),
+                            onPressed: () {
+                              if (_isSurat) {
+                                _fetchData(
+                                  isSurat: true,
+                                  sortDesc: !_isSorting,
+                                );
+                              } else {
+                                _fetchData(
+                                  isSurat: false,
+                                  sortDesc: !_isSorting,
+                                );
+                              }
+                            },
                           ),
-                          onPressed: () {
-                            if (_isSurat) {
-                              _fetchData(isSurat: true, sortDesc: !_isSorting);
-                            } else {
-                              _fetchData(isSurat: false, sortDesc: !_isSorting);
-                            }
-                          },
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
+                    // List nya
                     Expanded(
                       child: FutureBuilder<List<dynamic>>(
                         future: _dataFuture,

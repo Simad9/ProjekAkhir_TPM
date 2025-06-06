@@ -23,9 +23,26 @@ class MenuList extends StatelessWidget {
         style: TextStyle(fontSize: 14),
       ),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         alignment: Alignment.centerLeft,
       ),
     );
   }
+
+  // ## Nitip code
+  // Widget build(BuildContext context) {
+  //   return ElevatedButton.icon(
+  //     onPressed: onPress,
+  //     icon: Icon(icon),
+  //     label: Text(
+  //       title,
+  //       overflow: TextOverflow.ellipsis,
+  //       style: TextStyle(fontSize: 14),
+  //     ),
+  //     style: ElevatedButton.styleFrom(
+  //       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //       alignment: Alignment.centerLeft,
+  //     ),
+  //   );
+  // }
 }
