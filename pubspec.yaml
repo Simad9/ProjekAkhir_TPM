@@ -8,25 +8,27 @@ environment:
 
 dependencies:
   crypto: ^3.0.6
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.8  
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
+  flutter_local_notifications: ^17.0.0
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.0
-  http: ^1.4.0
+  http: ^1.1.0
   intl: ^0.20.2
   permission_handler: ^11.3.1
   sensors_plus: ^6.1.1
   shared_preferences: ^2.0.15
   shared_preferences_web: ^2.0.0
-  flutter_local_notifications: ^17.0.0
   timezone: ^0.9.2
 
 dev_dependencies:
+  build_runner: ^2.4.6
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  dart_code_metrics: ^4.19.2
 
 flutter:
   uses-material-design: true
